@@ -209,7 +209,6 @@ export default function EventDetail({ route, navigation }) {
                     <TextInput
                       style={{
                         height: 30,
-                        border: "none",
                         borderBottom: "solid 1px #d9d9d9",
                         borderWidth: 1,
                         marginLeft: 20,

@@ -5,11 +5,12 @@ import Bookmark from "../images/Bookmark";
 import ChatIcon from "../images/ChatIcon";
 import LinkIcon from "../images/LinkIcon";
 import EventCard from "../Event/EventCard";
-import Calendar from "../calendario";
+import Calendar from "../Calendario";
 
 import UnderConstruction from "../UnderConstruction";
 import Home from "../Home";
 import HomeIcon from "../images/HomeIcon";
+import ChatCard from "../Chat/ChatCard";
 
 const Tab = createBottomTabNavigator();
 
@@ -61,8 +62,8 @@ export default function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="Under2"
-        component={UnderConstruction}
+        name="Chat"
+        component={ChatCard}
         options={{
           tabBarIcon: ({ color, size }) => (
             <ChatIcon name="home" color="white" size="32" />

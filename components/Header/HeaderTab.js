@@ -33,7 +33,6 @@ export default function HeaderTab({ navigation }) {
           position: "absolute",
           top: 20,
           right: 10,
-          border: "none",
           borderRadius: 50,
           backgroundColor: "powderblue",
           display: "flex",

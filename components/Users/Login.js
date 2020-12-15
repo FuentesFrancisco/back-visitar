@@ -1,11 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { Formik, ErrorMessage } from "formik";
 import { StyleSheet, Button, TextInput, View, Text } from "react-native";
-
+import firebase from "firebase/app";
 import "firebase/auth";
 import { gql, useMutation } from "@apollo/client";
-import firebase from "firebase/app";
-import { Permissions, Notifications } from "expo";
 
 function Login(props) {
   const [task, setTask] = useState("Ingresar");
@@ -28,14 +26,16 @@ function Login(props) {
     }
   `;
   const [createUser, { loading, data, error, refetch }] = useMutation(ALTA);
-
-  let usuarioFirebase;
+  let token;
   const handle = useCallback(
     (values) => {
       if (task === "Ingresar")
         firebase
           .auth()
-          .signInWithEmailAndPassword(values.email, values.password);
+          .signInWithEmailAndPassword(values.email, values.password)
+          .catch((err) => {
+            alert(err);
+          });
       else
         firebase
           .auth()
@@ -45,10 +45,7 @@ function Login(props) {
           )
           .then((ans) => {
             values.uid = ans.user.uid;
-            usuarioFirebase = ans;
-          })
-          .then(() => {
-            registerForPushNotificationsAsync();
+            console.log(ans);
             createUser({
               variables: {
                 input: {
@@ -62,9 +59,12 @@ function Login(props) {
                   provincia: values.provincia,
                   telefono: values.telefono * 1,
                   uid: values.uid,
-                  token: usuarioFirebase.user.ya,
+                  token: ans.user.ya,
                 },
               },
+            }).catch((err) => {
+              firebase.auth().signOut();
+              alert("Error al registrar el usuario");
             });
           })
           .catch((err) => alert(err));
@@ -378,7 +378,6 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto_500Medium",
     flex: 1,
     padding: 15,
-    border: "solid 1px #d9d9d9",
     borderRadius: 20,
     marginLeft: 10,
     marginRight: 10,

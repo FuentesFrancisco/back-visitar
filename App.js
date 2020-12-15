@@ -18,9 +18,11 @@ import MyTabs from "./components/MenuBar/TabBar";
 import UnderConstruction from "./components/UnderConstruction";
 import HeaderTab from "./components/Header/HeaderTab";
 import Home from "./components/Home";
-import Calendario from "./components/calendario";
+import Calendario from "./components/Calendario";
 import Login from "./components/Users/Login";
-import expoToken from "./expoToken";
+import ChatCard from "./components/Chat/ChatCard";
+import ChatDetail from "./components/Chat/ChatDetail";
+import UsersList from "./components/Chat/UsersList";
 
 const Stack = createStackNavigator();
 
@@ -39,7 +41,7 @@ firebase.initializeApp(firebaseConfig);
 // Initialize Apollo Client
 const client = new ApolloClient({
   //web
-  uri: "https://visitar-ar.herokuapp.com/graphql",
+  uri: "http://localhost:3002/graphql",
   //emulador
   //uri: "http://192.168.100.3:3002/graphql",
   cache: new InMemoryCache(),
@@ -55,13 +57,13 @@ const MyTheme = {
 
 function App() {
   const { user, setUser } = useUser();
-
   useEffect(() => {
     const unsuscribe = firebase
       .auth()
       .onAuthStateChanged((user) => setUser(user));
     return () => unsuscribe();
   }, [setUser]);
+  console.log(user);
   return (
     <ApolloProvider client={client}>
       {user === null ? (
@@ -74,22 +76,17 @@ function App() {
             title="Cerrar sesión"
           />
           <Stack.Navigator
-            initialRouteName="expoToken"
+            initialRouteName="Tab"
             screenOptions={{
               cardStyle: { backgroundColor: "#fff" },
             }}
           >
             <Stack.Screen
-              name="expoToken"
-              component={expoToken}
-              options={{ headerShown: false }}
-            />
-
-            <Stack.Screen
               name="CreateEvent"
               component={CreateEvent}
               options={{ headerShown: false }}
             />
+
             <Stack.Screen
               name="Home"
               component={Home}
@@ -106,8 +103,18 @@ function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="Under"
-              component={UnderConstruction}
+              name="Chat"
+              component={ChatCard}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="UsersList"
+              component={UsersList}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="ChatDetail"
+              component={ChatDetail}
               options={{ headerShown: false }}
             />
             <Stack.Screen
