@@ -4,7 +4,7 @@ import context from "./userContext";
 
 export default function useUser() {
   const userContext = useContext(context);
-  const { user, setUser } = userContext;
+  const { user, setUser, userDB, setUserDB } = userContext;
 
-  return { user, setUser };
+  return { user, setUser, userDB, setUserDB };
 }

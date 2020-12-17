@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Formik, ErrorMessage } from "formik";
 import { StyleSheet, Button, TextInput, View, Text } from "react-native";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import "firebase/auth";
 import { gql, useMutation } from "@apollo/client";
 
@@ -73,7 +73,6 @@ function Login(props) {
   );
 
   return task === "Ingresar" ? (
-    
     <Formik
       initialValues={{ email: "", password: "" }}
       validate={(values) => {
@@ -93,7 +92,6 @@ function Login(props) {
         return errors;
       }}
       onSubmit={(values) => handle(values)}
-
     >
       {({ handleChange, handleBlur, handleSubmit, values }) => (
         <View style={styles.container}>
@@ -115,12 +113,10 @@ function Login(props) {
             value={values.email}
             keyboardType="email-address"
           />
-          
           <ErrorMessage
             style={{ color: "red" }}
             name="email"
-            component={Text}
-           
+            component="small"
           />
           <Text style={styles.text}>Password</Text>
           <TextInput
@@ -133,8 +129,7 @@ function Login(props) {
           <ErrorMessage
             style={{ color: "red" }}
             name="password"
-            component={Text}
-            
+            component="small"
           />
           <Button
             color="#7C88D5"
@@ -226,7 +221,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="emailRegister"
-              component={Text}
+              component="small"
             />
 
             <Text>Password</Text>
@@ -241,7 +236,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="passwordRegister"
-              component={Text}
+              component="small"
             />
 
             <Text>Nombre</Text>
@@ -255,7 +250,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="nombre"
-              component={Text}
+              component="small"
             />
 
             <Text>Apellido</Text>
@@ -269,7 +264,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="apellido"
-              component={Text}
+              component="small"
             />
             <Text>Teléfono</Text>
             <TextInput
@@ -284,7 +279,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="telefono"
-              component={Text}
+              component="small"
             />
 
             <Text>Provincia</Text>
@@ -298,7 +293,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="provincia"
-              component={Text}
+              component="small"
             />
 
             <Text>Matrícula</Text>
@@ -313,7 +308,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="matricula"
-              component={Text}
+              component="small"
             />
             <Text>Laboratorio</Text>
             <TextInput
@@ -326,7 +321,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="laboratorio"
-              component={Text}
+              component="small"
             />
             <Text>Imagen</Text>
             <TextInput
@@ -339,7 +334,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="imagen"
-              component={Text}
+              component="small"
             />
             <Text>Especialidad</Text>
             <TextInput
@@ -352,7 +347,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="especialidad"
-              component={Text}
+              component="small"
             />
           </View>
           {/* <Button onPress={(e) => handleSubmit(e, state)} title="Login" /> */}

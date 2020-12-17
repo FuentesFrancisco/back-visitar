@@ -11,6 +11,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  Modal,
 } from "react-native";
 import {
   useFonts,
@@ -19,6 +20,8 @@ import {
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
 import scroll from "../../../styles/scroll";
+import InputAnswer from "./InputAnswer";
+import InputQuestion from "./InputQuestion";
 
 const image = {
   uri:
@@ -28,7 +31,9 @@ const image = {
 export default function EventDetail({ route, navigation }) {
   const [question, setQuestion] = useState(false);
   const [insertar, setInsertar] = useState(false);
-
+  const [answer, setAnswer] = useState(false);
+  // const { user, setUser } = useUser();
+  // console.log("usuario", user);
   const [value, setValue] = useState({
     pregunta: "",
     congresoId: route.params.id,
@@ -36,29 +41,18 @@ export default function EventDetail({ route, navigation }) {
     reaccion: 0,
     usuarioId: "5fc8f54ace037c2030a884b5",
   });
-  //console.log(value);
+  const id = route.params.id;
+  const [respuesta, setRespuesta] = useState({
+    _id: "",
+    pregunta: "",
+    resupuesta: "",
+  });
+  console.log(respuesta);
   const [asiste, setAsiste] = useState({
     congresoId: route.params.id,
-    usuarioId: "5fc8f54ace037c2030a884b5",
+    // usuarioId: user.uid,
     asistire: true,
   });
-
-  const handleChange = (e) => {
-    setValue({
-      ...value,
-      pregunta: e,
-    });
-  };
-
-  const PREGUNTA = gql`
-    mutation congreso($input: PreguntaInput) {
-      addPregunta(input: $input) {
-        pregunta
-      }
-    }
-  `;
-
-  const [addpregunta, {}] = useMutation(PREGUNTA);
 
   const ASISTENCIA = gql`
     mutation asistencia($input: AsistenciaInput) {
@@ -93,6 +87,7 @@ export default function EventDetail({ route, navigation }) {
         descripcion
         patrocinador
         preguntas {
+          _id
           pregunta
           resupuesta
         }
@@ -206,27 +201,12 @@ export default function EventDetail({ route, navigation }) {
                 </TouchableOpacity>
                 {insertar ? (
                   <>
-                    <TextInput
-                      style={{
-                        height: 30,
-                        borderBottom: "solid 1px #d9d9d9",
-                        borderWidth: 1,
-                        marginLeft: 20,
-                        marginRight: 20,
-                      }}
-                      name={value.pregunta}
-                      onChangeText={handleChange}
+                    <InputQuestion
+                      id={id}
+                      refetch={refetch}
+                      insertar={insertar}
+                      setInsertar={setInsertar}
                     />
-                    <TouchableOpacity
-                      style={styles.buttonSend}
-                      onPress={async () => {
-                        await addpregunta({ variables: { input: value } });
-                        refetch();
-                        setInsertar(!insertar);
-                      }}
-                    >
-                      <Text style={styles.buttonText}>Enviar</Text>
-                    </TouchableOpacity>
                   </>
                 ) : null}
               </>
@@ -235,7 +215,27 @@ export default function EventDetail({ route, navigation }) {
               data.congreso.preguntas.length ? (
                 data.congreso.preguntas.map((p) => (
                   <View style={styles.details}>
-                    <Text style={styles.texto}>{p.pregunta}</Text>
+                    <Text key={p._id} style={styles.texto}>
+                      {p.pregunta}
+                    </Text>
+                    <Text style={styles.text}>
+                      {p.resupuesta ? p.resupuesta : "No hay respuesta"}
+                    </Text>
+                    {p.resupuesta ? null : (
+                      <TouchableOpacity
+                        style={styles.buttonResp}
+                        onPress={() => {
+                          setAnswer(!answer),
+                            setRespuesta({
+                              _id: p._id,
+                              pregunta: p.pregunta,
+                              resupuesta: "",
+                            });
+                        }}
+                      >
+                        <Text style={styles.buttonText}>Responder</Text>
+                      </TouchableOpacity>
+                    )}
                   </View>
                 ))
               ) : (
@@ -247,6 +247,16 @@ export default function EventDetail({ route, navigation }) {
               )
             ) : null}
           </>
+          {answer ? (
+            <InputAnswer
+              respuesta={respuesta}
+              setAnswer={setAnswer}
+              answer={answer}
+              setRespuesta={setRespuesta}
+              value={value}
+              refetch={refetch}
+            />
+          ) : null}
         </View>
       </ScrollView>
     );
@@ -342,6 +352,13 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
     paddingRight: 5,
     width: 60,
+  },
+  buttonResp: {
+    flex: 1,
+    backgroundColor: "#7C88D5",
+    borderRadius: 10,
+    padding: 5,
+    width: 70,
   },
   texto: {
     fontFamily: "Roboto_400Regular",

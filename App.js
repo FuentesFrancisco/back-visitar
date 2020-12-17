@@ -2,13 +2,13 @@ import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import EventCard from "./components/Event/EventCard";
 import EventDetail from "./components/Event/EventDetail/EventDetail";
-import { AppRegistry, Button, View } from "react-native";
+import { AppRegistry, Button } from "react-native";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import CreateEvent from "./components/Event/EventCrud/CreateEvent";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import UserList from "./components/Users/UsersList";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import { UserProvider } from "./components/Users/userContext";
 import "firebase/auth";
 import State from "./components/Users/State";
@@ -36,10 +36,7 @@ var firebaseConfig = {
   measurementId: "G-8Y4DCJFJ5Z",
 };
 
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-
+firebase.initializeApp(firebaseConfig);
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -68,7 +65,6 @@ function App() {
   }, [setUser]);
   console.log(user);
   return (
-    
     <ApolloProvider client={client}>
       {user === null ? (
         <Login />
