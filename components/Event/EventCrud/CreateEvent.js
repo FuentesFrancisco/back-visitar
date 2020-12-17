@@ -18,6 +18,7 @@ import {
   Roboto_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
+import { getImagen, takeImagen } from "../../pickImage/pick";
 
 const MUTATION = gql`
   mutation addCongreso($input: CongresoInput) {
@@ -32,6 +33,7 @@ export default function CreateEvent({ navigation }) {
     MUTATION
   );
 
+  let cargaImagen;
   let mutation = (values) => {
     console.log(values);
     createCongreso({
@@ -42,7 +44,7 @@ export default function CreateEvent({ navigation }) {
           ubicacion: values.ubicacion,
           fecha: [values.fecha],
           especialidad: [values.especialidad],
-          imagen: [values.imagen],
+          imagen: cargaImagen,
           publicado: true,
         },
       },
@@ -53,7 +55,17 @@ export default function CreateEvent({ navigation }) {
       })
       .catch((err) => alert(err));
   };
+  function cargarImagen() {
+    let result = getImagen();
+    result.then((res) => {
+      cargaImagen = res;
+    });
+  }
 
+  function cargarImagen2() {
+    setImagen(takeImagen());
+    console.log(imagen);
+  }
   /*   validate: (values) => {
     const errors = {};
     if (!values.titulo) errors.titulo = "Es necesario un titulo";
@@ -124,57 +136,56 @@ export default function CreateEvent({ navigation }) {
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View style={styles.container}>
-              <Form>
-                <View style={styles.inputGroup}>
-                  <TextInput
-                    onChangeText={handleChange("titulo")}
-                    onBlur={handleBlur("titulo")}
-                    value={values.titulo}
-                    placeholder="Título"
-                  />
-                </View>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("titulo")}
+                  onBlur={handleBlur("titulo")}
+                  value={values.titulo}
+                  placeholder="Título"
+                />
+              </View>
 
-                <View style={styles.inputGroup}>
-                  <TextInput
-                    onChangeText={handleChange("descripcion")}
-                    onBlur={handleBlur("descripcion")}
-                    value={values.descripcion}
-                    placeholder="Descripción"
-                  />
-                </View>
-                <View style={styles.inputGroup}>
-                  <TextInput
-                    onChangeText={handleChange("ubicacion")}
-                    onBlur={handleBlur("ubicacion")}
-                    value={values.ubicacion}
-                    placeholder="Ubicación"
-                  />
-                </View>
-                <View style={styles.inputGroup}>
-                  <TextInput
-                    onChangeText={handleChange("especialidad")}
-                    onBlur={handleBlur("especialidad")}
-                    value={values.especialidad}
-                    placeholder="Especialidad"
-                  />
-                </View>
-                <View style={styles.inputGroup}>
-                  <TextInput
-                    onChangeText={handleChange("imagen")}
-                    onBlur={handleBlur("imagen")}
-                    value={values.imagen}
-                    placeholder="Imagen"
-                  />
-                </View>
-                <View style={styles.inputGroup}>
-                  <TextInput
-                    onChangeText={handleChange("fecha")}
-                    onBlur={handleBlur("fecha")}
-                    value={values.fecha}
-                    placeholder="Fechas"
-                  />
-                </View>
-                {/*     <View style={styles.inputGroup}>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("descripcion")}
+                  onBlur={handleBlur("descripcion")}
+                  value={values.descripcion}
+                  placeholder="Descripción"
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("ubicacion")}
+                  onBlur={handleBlur("ubicacion")}
+                  value={values.ubicacion}
+                  placeholder="Ubicación"
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("especialidad")}
+                  onBlur={handleBlur("especialidad")}
+                  value={values.especialidad}
+                  placeholder="Especialidad"
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("imagen")}
+                  onBlur={handleBlur("imagen")}
+                  value={values.imagen}
+                  placeholder="Imagen"
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("fecha")}
+                  onBlur={handleBlur("fecha")}
+                  value={values.fecha}
+                  placeholder="Fechas"
+                />
+              </View>
+              {/*     <View style={styles.inputGroup}>
                 <TextInput
                   onChangeText={handleChange("modalidad")}
                   onBlur={handleBlur("modalidad")}
@@ -186,12 +197,23 @@ export default function CreateEvent({ navigation }) {
                   <Button
                     color="#7C88D5"
                     borderRadius="20"
+                    title="Agregar una foto almacenada"
+                    onPress={cargarImagen}
+                  />
+                  <Button
+                    color="#7C88D5"
+                    borderRadius="20"
+                    title="Agregar una foto con tu cámara"
+                    onPress={cargarImagen2}
+                  />
+                  <Button
+                    color="#7C88D5"
+                    borderRadius="20"
                     title="Crear"
                     /* disabled={isSubmitting} */
                     onPress={(e) => handleSubmit(e)}
                   />
                 </View>
-              </Form>
             </View>
           )}
         </Formik>

@@ -39,7 +39,7 @@ export default function EventDetail({ route, navigation }) {
     congresoId: route.params.id,
     resupuesta: "",
     reaccion: 0,
-    usuarioId: "5fc8f54ace037c2030a884b5",
+    usuarioId: "5fd3bd594e714434340e66bc",
   });
   const id = route.params.id;
   const [respuesta, setRespuesta] = useState({
@@ -50,6 +50,7 @@ export default function EventDetail({ route, navigation }) {
   console.log(respuesta);
   const [asiste, setAsiste] = useState({
     congresoId: route.params.id,
+    usuarioId: "5fd3bd594e714434340e66bc",
     // usuarioId: user.uid,
     asistire: true,
   });

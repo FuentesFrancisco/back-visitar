@@ -11,6 +11,7 @@ import UnderConstruction from "../UnderConstruction";
 import Home from "../Home";
 import HomeIcon from "../images/HomeIcon";
 import ChatCard from "../Chat/ChatCard";
+import InterestLinks from ".././LinkInteres/InterestLinks"
 
 const Tab = createBottomTabNavigator();
 
@@ -71,8 +72,8 @@ export default function MyTabs() {
         }}
       />
       <Tab.Screen
-        name="Under3"
-        component={UnderConstruction}
+        name="Links"
+        component={InterestLinks}
         options={{
           tabBarIcon: ({ color, size }) => (
             <LinkIcon name="home" color="white" size="32" />

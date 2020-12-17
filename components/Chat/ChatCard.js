@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import React from "react";
 import { AppLoading } from "expo";
 import useUser from "../Users/useUser";
 //import SearchBar from '../SearchBar/searchBar';
@@ -18,7 +17,6 @@ import {
   Roboto_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
-import scroll from "../../styles/scroll";
 import BackIcon from "../images/BackIcon";
 import NewIcon from "../images/NewIcon";
 import BinIcon from "../images/BinIcon";

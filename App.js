@@ -23,6 +23,8 @@ import Login from "./components/Users/Login";
 import ChatCard from "./components/Chat/ChatCard";
 import ChatDetail from "./components/Chat/ChatDetail";
 import UsersList from "./components/Chat/UsersList";
+import createLinks from "./components/LinkInteres/CrudLink";
+import InterestLinks from "./components/LinkInteres/InterestLinks"
 
 const Stack = createStackNavigator();
 
@@ -42,6 +44,7 @@ firebase.initializeApp(firebaseConfig);
 const client = new ApolloClient({
   //web
   uri: "https://visitar-ar.herokuapp.com/graphql",
+  //uri: "http://localhost:3002/graphql",
   //emulador
   //uri: "http://192.168.100.3:3002/graphql",
   cache: new InMemoryCache(),
@@ -130,6 +133,16 @@ function App() {
             <Stack.Screen
               name="Detail"
               component={EventDetail}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="createLinks"
+              component={createLinks}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="InterestLinks"
+              component={InterestLinks}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

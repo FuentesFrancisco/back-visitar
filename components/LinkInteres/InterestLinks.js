@@ -1,0 +1,206 @@
+import React, { useEffect, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+import { AppLoading } from "expo";
+import createLinks from "./CrudLink";
+import {
+  StyleSheet,
+  ScrollView,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import {
+  useFonts,
+  Roboto_100Thin,
+  Roboto_400Regular,
+  Roboto_500Medium,
+} from "@expo-google-fonts/roboto";
+import NewIcon from "../images/NewIcon";
+import BinIcon from "../images/BinIcon";
+import { TextInput } from "react-native-gesture-handler";
+import SearchIcon from "../images/SearchIcon";
+import * as Linking from "expo-linking";
+
+const QUERY = gql`
+  query links {
+    links {
+      titulo
+      descripcion
+      link
+      _id
+    }
+  }
+`;
+
+export default function InterestLinks({ navigation }) {
+  const { loading, data, error, refetch } = useQuery(QUERY);
+  console.log(data);
+
+  let [fontsLoaded] = useFonts({
+    Roboto_100Thin,
+    Roboto_400Regular,
+    Roboto_500Medium,
+  });
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  } else if (loading) {
+    return <AppLoading />;
+  } else {
+    return (
+      <View style={styles.container}>
+        <View style={styles.bar}>
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={() => navigation.goBack()}
+          >
+            <Text>
+              <BinIcon name="new" color="grey" size="32" />
+            </Text>
+          </TouchableOpacity>
+          <View style={styles.inputCont}>
+            <TextInput
+              placeholder="Buscar..."
+              style={{
+                height: 35,
+                borderColor: "#c4c4c4",
+                borderRadius: 20,
+                borderWidth: 1,
+                flex: 7,
+                marginTop: 8,
+                marginBottom: 15,
+                color: "#c4c4c4",
+                paddingLeft: 20,
+              }}
+            ></TextInput>
+            <TouchableOpacity onPress={() => alert("buscar")}>
+              <SearchIcon
+                name="search"
+                color="#c4c4c4"
+                style={{
+                  flex: 1,
+                  marginTop: 10,
+                  marginLeft: 3,
+                  justifyContent: "center",
+                }}
+                size="22"
+              />
+            </TouchableOpacity>
+          </View>
+          <TouchableOpacity
+            style={styles.iconContainerLeft}
+            onPress={() => navigation.navigate("createLinks")}
+          >
+            <Text style={styles.editar}>
+              <NewIcon name="new" color="grey" size="28" />
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView style={styles.scroll2}>
+          {data.links.map((link) => (
+            <TouchableOpacity onPress={() => Linking.openURL("https://" + link.link).catch((err) =>
+                  console.error("An error occurred", err)
+                )}>
+              <View style={styles.eventContainer}>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>{link.titulo}</Text>
+
+                  <Text style={styles.text}>{link.descripcion}</Text>
+                  <Text style={styles.text}>{link.link}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    width: "96%",
+    display: "flex",
+    borderWidth: 1,
+    borderColor: "#f5f2f2",
+    borderRadius: 20,
+    marginTop: 100,
+    marginLeft: "2%",
+    marginRight: "2%",
+    lineHeight: 800,
+  },
+  bar: {
+    height: 45,
+    display: "flex",
+    flexDirection: "row",
+    alignContent: "space-around",
+  },
+  iconContainer: {
+    flex: 1,
+    margin: 10,
+  },
+  inputCont: {
+    display: "flex",
+    flexDirection: "row",
+    flex: 3,
+    marginBottom: 5,
+  },
+  iconContainerLeft: {
+    flex: 1,
+    textAlign: "right",
+    margin: 10,
+  },
+  scroll2: {
+    width: "96%",
+    height: 470,
+    marginLeft: "2%",
+    marginRight: "2%",
+    marginBottom: 30,
+    padding: 2,
+  },
+
+  eventContainer: {
+    flex: 1,
+    flexDirection: "row",
+    marginTop: 10,
+    borderWidth: 1,
+    borderColor: "#f5f2f2",
+    borderRadius: 20,
+    backgroundColor: "#7C88D5",
+  },
+  eventDetail: {
+    flex: 4,
+    flexWrap: "wrap",
+    /* backgroundColor: "blue",*/
+    paddingTop: 15,
+    paddingLeft: 10,
+    paddingBottom: 15,
+    borderTopLeftRadius: 20,
+    borderBottomLeftRadius: 20,
+    flexWrap: "wrap",
+
+    paddingRight: 10,
+  },
+
+  image: {
+    flex: 1,
+    resizeMode: "cover",
+    height: 60,
+    width: 60,
+    borderRadius: 70,
+    marginRight: 15,
+    margin: 7,
+  },
+  titulo: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 18,
+    color: "white",
+    flex: 1,
+  },
+  text: {
+    fontFamily: "Roboto_100Thin",
+    width: "100%",
+    color: "white",
+    flex: 2,
+  },
+});

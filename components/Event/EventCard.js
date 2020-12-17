@@ -38,10 +38,6 @@ const QUERY = gql`
 `;
 
 export default function EventCard({ navigation }) {
-  // const where = {
-  //   publicado: true,
-  // };
-  console.log("volvio entre");
   const { loading, data, error, refetch } = useQuery(QUERY);
   useEffect(() => refetch(), []);
   var fecha;
@@ -67,7 +63,6 @@ export default function EventCard({ navigation }) {
           <Text style={styles.buttonText1}> + Agregar Congreso</Text>
         </TouchableOpacity>
 
-        {/*<SearchBar navigation={navigation}/>*/}
         {data.congresos.map((congreso) => (
           <View key={congreso._id} style={styles.eventContainer}>
             <View style={styles.eventDetail}>
@@ -85,7 +80,7 @@ export default function EventCard({ navigation }) {
                 style={styles.button}
                 onPress={() =>
                   /*setFlag(!flag),*/
-                  navigation.navigate("Detail", { id: congreso._id })
+                  navigation.navigate("Detail")
                 }
               >
                 <Text style={styles.buttonText}> + </Text>

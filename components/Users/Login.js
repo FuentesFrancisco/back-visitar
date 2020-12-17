@@ -4,8 +4,10 @@ import { StyleSheet, Button, TextInput, View, Text } from "react-native";
 import * as firebase from "firebase";
 import "firebase/auth";
 import { gql, useMutation } from "@apollo/client";
+import { getImagen, takeImagen } from "../pickImage/pick";
 
 function Login(props) {
+  let cargaImagen;
   const [task, setTask] = useState("Ingresar");
   const ALTA = gql`
     mutation addUsuario($input: UsuarioInput) {
@@ -45,14 +47,14 @@ function Login(props) {
           )
           .then((ans) => {
             values.uid = ans.user.uid;
-            console.log(ans);
+            console.log("estado", cargaImagen);
             createUser({
               variables: {
                 input: {
                   especialidad: [values.especialidad],
                   apellido: values.apellido,
                   email: values.emailRegister,
-                  imagen: values.imagen,
+                  imagen: cargaImagen,
                   laboratorio: values.laboratorio,
                   matricula: values.matricula * 1,
                   nombre: values.nombre,
@@ -71,6 +73,18 @@ function Login(props) {
     },
     [task]
   );
+
+  function cargarImagen() {
+    let result = getImagen();
+    result.then((ans) => {
+      cargaImagen = ans;
+    });
+  }
+
+  function cargarImagen2() {
+    setImagen(takeImagen());
+    console.log(imagen);
+  }
 
   return task === "Ingresar" ? (
     <Formik
@@ -93,7 +107,7 @@ function Login(props) {
       }}
       onSubmit={(values) => handle(values)}
     >
-      {({ handleChange, handleBlur, handleSubmit, values }) => (
+      {({ handleChange, handleBlur, handleSubmit, values, isSubmitting }) => (
         <View style={styles.container}>
           <Button
             color="#7C88D5"
@@ -167,7 +181,6 @@ function Login(props) {
           errors.matricula = "Debes ingresar una Matricula";
         if (!values.laboratorio)
           errors.laboratorio = "Debes ingresar un Laboratorio";
-        if (!values.imagen) errors.imagen = "Debes ingresar una Imagen";
         if (!values.especialidad)
           errors.especialidad = "Debes ingresar una Especialidad";
         if (!values.emailRegister) {
@@ -187,7 +200,9 @@ function Login(props) {
             "min 8 caracteres, un numero y una mayuscula";
         return errors;
       }}
-      onSubmit={(values) => handle(values)}
+      onSubmit={(values) => {
+        return handle(values);
+      }}
     >
       {({
         handleChange,
@@ -323,19 +338,7 @@ function Login(props) {
               name="laboratorio"
               component={Text}
             />
-            <Text>Imagen</Text>
-            <TextInput
-              style={styles.inputGroup}
-              name="imagen"
-              onChangeText={handleChange("imagen")}
-              onBlur={handleBlur("imagen")}
-              value={values.imagen}
-            />
-            <ErrorMessage
-              style={{ color: "red" }}
-              name="imagen"
-              component={Text}
-            />
+
             <Text>Especialidad</Text>
             <TextInput
               style={styles.inputGroup}
@@ -350,8 +353,20 @@ function Login(props) {
               component={Text}
             />
           </View>
-          {/* <Button onPress={(e) => handleSubmit(e, state)} title="Login" /> */}
           <Button
+            color="#7C88D5"
+            borderRadius="20"
+            title="Agregar una foto almacenada"
+            onPress={cargarImagen}
+          />
+          <Button
+            color="#7C88D5"
+            borderRadius="20"
+            title="Agregar una foto con tu cámara"
+            onPress={cargarImagen2}
+          />
+          <Button
+            disabled={isSubmitting}
             color="#7C88D5"
             title="Confirmar"
             onPress={(e) => handleSubmit(e)}
