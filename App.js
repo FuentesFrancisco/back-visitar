@@ -8,7 +8,7 @@ import CreateEvent from "./components/Event/EventCrud/CreateEvent";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import UserList from "./components/Users/UsersList";
-import firebase from "firebase/app";
+import * as firebase from "firebase";
 import { UserProvider } from "./components/Users/userContext";
 import "firebase/auth";
 import State from "./components/Users/State";

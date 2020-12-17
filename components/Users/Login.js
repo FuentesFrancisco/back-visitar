@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Formik, ErrorMessage } from "formik";
 import { StyleSheet, Button, TextInput, View, Text } from "react-native";
-import firebase from "firebase/app";
+import * as firebase from "firebase";
 import "firebase/auth";
 import { gql, useMutation } from "@apollo/client";
 
@@ -116,7 +116,7 @@ function Login(props) {
           <ErrorMessage
             style={{ color: "red" }}
             name="email"
-            component="small"
+            component={Text}
           />
           <Text style={styles.text}>Password</Text>
           <TextInput
@@ -129,7 +129,7 @@ function Login(props) {
           <ErrorMessage
             style={{ color: "red" }}
             name="password"
-            component="small"
+            component={Text}
           />
           <Button
             color="#7C88D5"
@@ -221,7 +221,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="emailRegister"
-              component="small"
+              component={Text}
             />
 
             <Text>Password</Text>
@@ -236,7 +236,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="passwordRegister"
-              component="small"
+              component={Text}
             />
 
             <Text>Nombre</Text>
@@ -250,7 +250,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="nombre"
-              component="small"
+              component={Text}
             />
 
             <Text>Apellido</Text>
@@ -264,7 +264,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="apellido"
-              component="small"
+              component={Text}
             />
             <Text>Teléfono</Text>
             <TextInput
@@ -279,7 +279,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="telefono"
-              component="small"
+              component={Text}
             />
 
             <Text>Provincia</Text>
@@ -293,7 +293,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="provincia"
-              component="small"
+              component={Text}
             />
 
             <Text>Matrícula</Text>
@@ -308,7 +308,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="matricula"
-              component="small"
+              component={Text}
             />
             <Text>Laboratorio</Text>
             <TextInput
@@ -321,7 +321,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="laboratorio"
-              component="small"
+              component={Text}
             />
             <Text>Imagen</Text>
             <TextInput
@@ -334,7 +334,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="imagen"
-              component="small"
+              component={Text}
             />
             <Text>Especialidad</Text>
             <TextInput
@@ -347,7 +347,7 @@ function Login(props) {
             <ErrorMessage
               style={{ color: "red" }}
               name="especialidad"
-              component="small"
+              component={Text}
             />
           </View>
           {/* <Button onPress={(e) => handleSubmit(e, state)} title="Login" /> */}
