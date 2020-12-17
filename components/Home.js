@@ -1,11 +1,9 @@
 import React from "react";
 import { AppLoading } from "expo";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ImageBackground,
-} from "react-native";
+import useUser from "../components/Users/useUser";
+import { gql, useQuery } from "@apollo/client";
+
+import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import {
   useFonts,
   Roboto_100Thin,
@@ -19,7 +17,39 @@ const image = {
   main_logo: require("./images/visitar.png"),
   doc: require("./images/doc1.png"),
 };
+
+const QUERY = gql`
+  query usuarios($where: JSON) {
+    usuarios(where: $where) {
+      _id
+      email
+      nombre
+      apellido
+      telefono
+      rol
+      provincia
+      matricula
+      laboratorio
+      verificado
+      imagen
+      especialidad
+    }
+  }
+`;
+
 export default function Home() {
+  const { user, userDB, setUserDB } = useUser();
+  let uid;
+  if (user) uid = user.uid;
+  const { loading, data, error, refetch } = useQuery(QUERY, {
+    variables: {
+      where: {
+        uid: uid,
+      },
+    },
+  });
+  data && setUserDB(data);
+
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
