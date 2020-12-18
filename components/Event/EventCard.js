@@ -56,20 +56,6 @@ export default function EventCard({ navigation }) {
   } else {
     return (
       <ScrollView style={scroll}>
-        <TouchableOpacity
-          /*style={styles.buttonCrear}*/
-          onPress={() => navigation.navigate("CreateEvent")}
-        >
-          <Text style={styles.buttonText1}> + Agregar Congreso</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          /*style={styles.buttonCrear}*/
-          onPress={() => navigation.navigate("DeleteEditEvent", navigation)}
-        >
-          <Text style={styles.buttonText1}> - Eliminar/Editar Congreso</Text>
-        </TouchableOpacity>
-
         {/*<SearchBar navigation={navigation}/>*/}
         {data.congresos.map((congreso) => (
           <View key={congreso._id} style={styles.eventContainer}>
@@ -101,7 +87,7 @@ export default function EventCard({ navigation }) {
             </View>
             <View style={styles.eventImg}>
               <Image
-                source={congreso.imagen[0] ? congreso.imagen[0] : image}
+                source={congreso.imagen ? congreso.imagen : image}
                 style={styles.image}
               ></Image>
             </View>

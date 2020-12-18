@@ -7,6 +7,7 @@ import {
   Text,
   View,
   TouchableOpacity,
+  requireNativeComponent,
 } from "react-native";
 import {
   useFonts,
@@ -39,13 +40,17 @@ const MUTATION = gql`
   }
 `;
 
-export default function InterestLinks({ navigation }) {
+export default function InterestLinks({ navigation, route }) {
   const { loading, data, error, refetch } = useQuery(QUERY);
   const [borrarLink, {}] = useMutation(MUTATION);
 
   const [borrar, setBorrar] = useState(false);
-  console.log(data);
-
+  console.log("ROUTE", route);
+  let adm;
+  if (route.params) {
+    adm = route.params.admin;
+  }
+  console.log("route adm", adm);
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
@@ -59,14 +64,16 @@ export default function InterestLinks({ navigation }) {
     return (
       <View style={styles.container}>
         <View style={styles.bar}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={() => setBorrar(true)}
-          >
-            <Text>
-              <BinIcon name="new" color="grey" size="32" />
-            </Text>
-          </TouchableOpacity>
+          {adm && adm ? (
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => setBorrar(true)}
+            >
+              <Text>
+                <BinIcon name="new" color="grey" size="32" />
+              </Text>
+            </TouchableOpacity>
+          ) : null}
           <View style={styles.inputCont}>
             <TextInput
               placeholder="Buscar..."
@@ -96,14 +103,16 @@ export default function InterestLinks({ navigation }) {
               />
             </TouchableOpacity>
           </View>
-          <TouchableOpacity
-            style={styles.iconContainerLeft}
-            onPress={() => navigation.navigate("createLinks")}
-          >
-            <Text style={styles.editar}>
-              <NewIcon name="new" color="grey" size="28" />
-            </Text>
-          </TouchableOpacity>
+          {adm && adm ? (
+            <TouchableOpacity
+              style={styles.iconContainerLeft}
+              onPress={() => navigation.navigate("createLinks")}
+            >
+              <Text style={styles.editar}>
+                <NewIcon name="new" color="grey" size="28" />
+              </Text>
+            </TouchableOpacity>
+          ) : null}
         </View>
         <ScrollView style={styles.scroll2}>
           {data.links.map((link) => (

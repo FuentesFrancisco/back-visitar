@@ -34,7 +34,7 @@ export default function CreateEvent({ navigation }) {
 
   let cargaImagen;
   let mutation = (values) => {
-    console.log(values);
+    console.log("values", values);
     createCongreso({
       variables: {
         input: {
@@ -45,6 +45,7 @@ export default function CreateEvent({ navigation }) {
           especialidad: [values.especialidad],
           imagen: cargaImagen,
           publicado: true,
+          modalidad: values.modalidad,
         },
       },
       /* modalidad: values.modalidad, */
@@ -92,9 +93,9 @@ export default function CreateEvent({ navigation }) {
             descripcion: "",
             ubicacion: "",
             especialidad: [""],
-            /*    modalidad: "", */
             imagen: [""],
             fecha: "",
+            modalidad: "",
           }}
           onSubmit={(values) => mutation(values)}
           /* validate={(values) => {
@@ -169,6 +170,14 @@ export default function CreateEvent({ navigation }) {
                   onBlur={handleBlur("fecha")}
                   value={values.fecha}
                   placeholder="Fechas"
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("modalidad")}
+                  onBlur={handleBlur("modalidad")}
+                  value={values.modalidad}
+                  placeholder="Modalidad"
                 />
               </View>
               {/*     <View style={styles.inputGroup}>

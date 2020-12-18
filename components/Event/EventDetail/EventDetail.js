@@ -22,7 +22,7 @@ import {
 import scroll from "../../../styles/scroll";
 import InputAnswer from "./InputAnswer";
 import InputQuestion from "./InputQuestion";
-
+import useUser from "../../Users/useUser";
 const image = {
   uri:
     "https://www.hqts.com/wp-content/uploads/2020/04/Pharmaceutical-Materials-no-logo-01-1110x550.jpg",
@@ -32,14 +32,14 @@ export default function EventDetail({ route, navigation }) {
   const [question, setQuestion] = useState(false);
   const [insertar, setInsertar] = useState(false);
   const [answer, setAnswer] = useState(false);
-  // const { user, setUser } = useUser();
+  const { userDB } = useUser();
   // console.log("usuario", user);
   const [value, setValue] = useState({
     pregunta: "",
     congresoId: route.params.id,
     resupuesta: "",
     reaccion: 0,
-    usuarioId: "5fd3bd594e714434340e66bc",
+    usuarioId: userDB.usuarios[0]._id,
   });
   const id = route.params.id;
   const [respuesta, setRespuesta] = useState({
@@ -50,7 +50,7 @@ export default function EventDetail({ route, navigation }) {
   console.log(respuesta);
   const [asiste, setAsiste] = useState({
     congresoId: route.params.id,
-    usuarioId: "5fd3bd594e714434340e66bc",
+    usuarioId: userDB.usuarios[0]._id,
     // usuarioId: user.uid,
     asistire: true,
   });
@@ -87,6 +87,7 @@ export default function EventDetail({ route, navigation }) {
         especialidad
         descripcion
         patrocinador
+        modalidad
         preguntas {
           _id
           pregunta
@@ -153,6 +154,9 @@ export default function EventDetail({ route, navigation }) {
             </Text>
             <Text style={styles.text}> Lugar: {data.congreso.ubicacion}</Text>
             <Text style={styles.text}>{data.congreso.descripcion}</Text>
+            <Text style={styles.text}>
+              Modalidad: {data.congreso.modalidad}
+            </Text>
             <Text style={styles.text}>
               {data.congreso.asistencias.length === 1
                 ? " 1 persona asistirá"

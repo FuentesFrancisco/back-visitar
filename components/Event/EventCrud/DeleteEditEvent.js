@@ -62,9 +62,10 @@ export default function DeleteEvent({ navigation }) {
   } else {
     return (
       <ScrollView style={styles.scroll}>
-        {/*        <TouchableOpacity
+        <Text style={styles.titulo2}> Eliminar/Editar Congreso </Text>
+        {/*   <TouchableOpacity
           style={styles.buttonSend}
-          onPress={() => navigation.goBack()}
+          onPress={() => navigation.navigate("AdminPanel")}
         >
           <Text style={styles.buttonText}>Volver</Text>
         </TouchableOpacity> */}
@@ -128,7 +129,8 @@ const styles = StyleSheet.create({
     color: "#454444",
   },
   titulo2: {
-    fontSize: 15,
+    fontFamily: "Roboto_500Medium",
+    fontSize: 18,
     marginBottom: 20,
     marginTop: 30,
     textAlign: "center",

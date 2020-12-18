@@ -34,6 +34,20 @@ const EditCongresos = styled.TouchableOpacity`
   width: 95%;
 `;
 
+const CreateCongresos = styled.TouchableOpacity`
+  background: transparent;
+  border-radius: 10;
+  background-color: #7c88d5;
+  border-color: powderblue;
+  border-width: 0.7;
+  color: palevioletred;
+  padding: 10px;
+  text-align: center;
+  width: 35%;
+  margin: 10px;
+  width: 95%;
+`;
+
 const Answers = styled.TouchableOpacity`
   border-radius: 10;
   border-color: powderblue;
@@ -47,7 +61,20 @@ const Answers = styled.TouchableOpacity`
   margin: 10px;
 `;
 
-const EditLinks = styled.TouchableOpacity`
+const CreateLinks = styled.TouchableOpacity`
+  border-radius: 10;
+  border-color: powderblue;
+  border-width: 0.7;
+  color: palevioletred;
+  padding: 10px;
+  text-align: center;
+  width: 35%;
+  background-color: #7c88d5;
+  margin: 10px;
+  width: 95%;
+`;
+
+const DeleteLinks = styled.TouchableOpacity`
   border-radius: 10;
   border-color: powderblue;
   border-width: 0.7;
@@ -65,16 +92,26 @@ export default function AdminPanel({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.titulo}> Panel de Administrador </Text>
       <UserPromote onPress={() => navigation.navigate("UserPromote")}>
-        <Text style={styles.text}>Promoción de Usuarios</Text>
+        <Text style={styles.text}>Cambiar rol de usuarios</Text>
       </UserPromote>
 
-      <EditCongresos onPress={() => navigation.navigate("CreateEvent")}>
-        <Text style={styles.text}>Editar/Eliminar Congresos</Text>
+      <CreateCongresos onPress={() => navigation.navigate("CreateEvent")}>
+        <Text style={styles.text}>Crear congreso</Text>
+      </CreateCongresos>
+
+      <EditCongresos onPress={() => navigation.navigate("DeleteEditEvent")}>
+        <Text style={styles.text}>Eliminar/Editar Congresos</Text>
       </EditCongresos>
 
-      <EditLinks onPress={() => navigation.navigate("createLinks")}>
-        <Text style={styles.text}>Editar/Eliminar Links</Text>
-      </EditLinks>
+      <CreateLinks onPress={() => navigation.navigate("createLinks")}>
+        <Text style={styles.text}>Crear links</Text>
+      </CreateLinks>
+
+      <DeleteLinks
+        onPress={() => navigation.navigate("InterestLinks", { admin: true })}
+      >
+        <Text style={styles.text}>Eliminar/Editar Links</Text>
+      </DeleteLinks>
 
       <Answers /* onPress={() => navigation.navigate("UserPromote")} */>
         <Text style={styles.text}>Respuestas</Text>

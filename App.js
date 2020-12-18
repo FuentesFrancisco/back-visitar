@@ -18,7 +18,7 @@ import MyTabs from "./components/MenuBar/TabBar";
 import UnderConstruction from "./components/UnderConstruction";
 import HeaderTab from "./components/Header/HeaderTab";
 import Home from "./components/Home";
-import Calendario from "./components/Calendario";
+import Calendario from "./components/calendario";
 import Login from "./components/Users/Login";
 import ChatCard from "./components/Chat/ChatCard";
 import ChatDetail from "./components/Chat/ChatDetail";
@@ -47,7 +47,8 @@ firebase.initializeApp(firebaseConfig);
 // Initialize Apollo Client
 const client = new ApolloClient({
   //web
-  uri: "https://visitar-ar.herokuapp.com/graphql",
+  //uri: "https://visitar-ar.herokuapp.com/graphql",
+  uri: "http://192.168.1.26:3002/graphql", //Leandro
   cache: new InMemoryCache(),
 });
 
@@ -67,7 +68,7 @@ function App() {
       .onAuthStateChanged((user) => setUser(user));
     return () => unsuscribe();
   }, [setUser]);
-  console.log(user);
+  /* console.log(user); */
   return (
     <ApolloProvider client={client}>
       {user === null ? (
