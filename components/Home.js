@@ -46,6 +46,7 @@ export default function Home() {
     },
   });
   data && setUserDB(data);
+  
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,

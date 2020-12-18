@@ -18,7 +18,7 @@ import MyTabs from "./components/MenuBar/TabBar";
 import UnderConstruction from "./components/UnderConstruction";
 import HeaderTab from "./components/Header/HeaderTab";
 import Home from "./components/Home";
-import Calendario from "./components/calendario";
+import Calendario from "./components/Calendario";
 import Login from "./components/Users/Login";
 import ChatCard from "./components/Chat/ChatCard";
 import ChatDetail from "./components/Chat/ChatDetail";
@@ -28,6 +28,8 @@ import UserPromote from "./components/AdminPanel/UserPromote";
 /* import DeleteEvent from "./components/Event/EventCrud/DeleteEvent"; */
 import createLinks from "./components/LinkInteres/CrudLink";
 import InterestLinks from "./components/LinkInteres/InterestLinks";
+import AgregarTarea from "./components/Calendario/AgregarTarea";
+import FechaSeleccionada from "./components/Calendario/FechaSeleccionada";
 import EditEvent from "./components/Event/EventCrud/EditEvent";
 
 const Stack = createStackNavigator();
@@ -47,8 +49,8 @@ firebase.initializeApp(firebaseConfig);
 // Initialize Apollo Client
 const client = new ApolloClient({
   //web
-  //uri: "https://visitar-ar.herokuapp.com/graphql",
-  uri: "http://192.168.1.26:3002/graphql", //Leandro
+  uri: "https://visitar-ar.herokuapp.com/graphql",
+  //uri: "http://192.168.1.26:3002/graphql", //Leandro
   cache: new InMemoryCache(),
 });
 
@@ -146,11 +148,17 @@ function App() {
               component={UserPromote}
               options={{ headerShown: false }}
             />
-            {/*      <Stack.Screen
+
+            <Stack.Screen
+              name="AgregarTarea"
+              component={AgregarTarea}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
               name="DeleteEvent"
               component={DeleteEvent}
               options={{ headerShown: false }}
-            /> */}
+            />
             <Stack.Screen
               name="createLinks"
               component={createLinks}
@@ -164,6 +172,11 @@ function App() {
             <Stack.Screen
               name="EditEvent"
               component={EditEvent}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="FechaSeleccionada"
+              component={FechaSeleccionada}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

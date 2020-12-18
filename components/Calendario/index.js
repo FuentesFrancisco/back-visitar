@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { Agenda } from "react-native-calendars";
+import { CalendarList } from "react-native-calendars";
 import { gql, useQuery } from "@apollo/client";
 import { LocaleConfig } from "react-native-calendars";
 import idioma from "./idioma";
-import styles from "./style";
-import AgregarTarea from "./AgregarTarea";
 
 LocaleConfig.locales["es"] = idioma;
 LocaleConfig.defaultLocale = "es";
@@ -17,23 +15,45 @@ export default function Calendario({ navigation }) {
         _id
         titulo
         fecha
+        descripcion
+      }
+      tareas {
+        titulo
+        _id
+        fecha
+        color
+        descripcion
       }
     }
   `;
-
   const [tareas, setTareas] = useState({});
-
   const obj = {};
+  let obj2;
 
   const fetching = () => {
-    const { loading, data, error, refetch } = useQuery(QUERY);
+    const { data, error, refetch } = useQuery(QUERY);
     refetch();
     if (error) return error;
     if (data) {
+      obj2 = data;
+
+      data.tareas.map((tareas) => {
+        tareas.fecha.map((dias, i) => {
+          let [dia, hora] = dias.split("T");
+          obj[dia] = {
+            ...obj[dia],
+            hora,
+            items: [tareas.titulo],
+            marked: true,
+            dotColor: tareas.color || "red",
+          };
+        });
+      });
       data.congresos.map((congreso) => {
         congreso.fecha.map((dias, i) => {
           let [dia, hora] = dias.split("T");
           obj[dia] = {
+            ...obj[dia],
             hora,
             color: "lightblue",
             items: [congreso.titulo],
@@ -47,29 +67,19 @@ export default function Calendario({ navigation }) {
   fetching();
 
   const seteo = (dia) => {
-    if (obj[dia.dateString]) {
-      let filtro = obj[dia.dateString];
-      let hora = filtro.hora.slice(0, 5);
-      return setTareas({ [dia.dateString]: [`${hora} ${filtro.items[0]}`] });
-    } else return setTareas({ [dia.dateString]: ["Aun no tenés actividades"] });
+    return navigation.navigate("FechaSeleccionada", {
+      data: obj2,
+      fecha: dia,
+    });
   };
   return (
     <>
-      <Agenda
-        renderDay={(day, item) => {
-          return (
-            <View style={styles.cont}>
-              <View style={styles.view}>
-                <Text style={styles.day}>{day && day.day}</Text>
-                <View style={styles.texto}>
-                  <Text style={styles.item}>{item && item}</Text>
-                </View>
-              </View>
-            </View>
-          );
-        }}
+      <CalendarList
         onDayPress={(e) => seteo(e)}
         hideExtraDays={true}
+        onDayLongPress={(e) =>
+          navigation.navigate("AgregarTarea", { fecha: e })
+        }
         selected={Date()}
         items={tareas}
         markingType={"period"}
@@ -79,6 +89,14 @@ export default function Calendario({ navigation }) {
           agendaKnobColor: "#7C88D5",
           selectedDayTextColor: "#7C88D5",
           dayTextColor: "black",
+        }}
+        style={{
+          borderWidth: 1,
+          borderColor: "gray",
+          height: "97%",
+        }}
+        theme={{
+          todayTextColor: "#00adf5",
         }}
       />
     </>
