@@ -8,7 +8,7 @@ import CreateEvent from "./components/Event/EventCrud/CreateEvent";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import UserList from "./components/Users/UsersList";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import { UserProvider } from "./components/Users/userContext";
 import "firebase/auth";
 import State from "./components/Users/State";
@@ -23,8 +23,12 @@ import Login from "./components/Users/Login";
 import ChatCard from "./components/Chat/ChatCard";
 import ChatDetail from "./components/Chat/ChatDetail";
 import UsersList from "./components/Chat/UsersList";
+import DeleteEditEvent from "./components/Event/EventCrud/DeleteEditEvent";
+import UserPromote from "./components/AdminPanel/UserPromote";
+/* import DeleteEvent from "./components/Event/EventCrud/DeleteEvent"; */
 import createLinks from "./components/LinkInteres/CrudLink";
-import InterestLinks from "./components/LinkInteres/InterestLinks"
+import InterestLinks from "./components/LinkInteres/InterestLinks";
+import EditEvent from "./components/Event/EventCrud/EditEvent";
 
 const Stack = createStackNavigator();
 
@@ -44,9 +48,6 @@ firebase.initializeApp(firebaseConfig);
 const client = new ApolloClient({
   //web
   uri: "https://visitar-ar.herokuapp.com/graphql",
-  //uri: "http://localhost:3002/graphql",
-  //emulador
-  //uri: "http://192.168.100.3:3002/graphql",
   cache: new InMemoryCache(),
 });
 
@@ -89,7 +90,6 @@ function App() {
               component={CreateEvent}
               options={{ headerShown: false }}
             />
-
             <Stack.Screen
               name="Home"
               component={Home}
@@ -136,6 +136,21 @@ function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
+              name="DeleteEditEvent"
+              component={DeleteEditEvent}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="UserPromote"
+              component={UserPromote}
+              options={{ headerShown: false }}
+            />
+            {/*      <Stack.Screen
+              name="DeleteEvent"
+              component={DeleteEvent}
+              options={{ headerShown: false }}
+            /> */}
+            <Stack.Screen
               name="createLinks"
               component={createLinks}
               options={{ headerShown: false }}
@@ -143,6 +158,11 @@ function App() {
             <Stack.Screen
               name="InterestLinks"
               component={InterestLinks}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="EditEvent"
+              component={EditEvent}
               options={{ headerShown: false }}
             />
           </Stack.Navigator>

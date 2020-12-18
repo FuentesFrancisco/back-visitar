@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   title: {
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_400Regular",
     fontSize: 18,
     marginTop: 20,
     marginBottom: 10,
@@ -164,5 +164,6 @@ const styles = StyleSheet.create({
     width: 80,
     textAlign: "center",
     borderRadius: 10,
+    borderColor: "powderblue",
   },
 });

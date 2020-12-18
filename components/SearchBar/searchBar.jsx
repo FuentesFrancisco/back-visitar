@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
     // paddingTop: 35,
     display: "flex",
     flexDirection: "column",
-    justifySelf: "center",
+
     marginLeft: 35,
     marginRight: 35,
 
@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
   title: {
     display: "flex",
     justifyContent: "center",
-    fontSize: "14px",
+    fontSize: 14,
     color: "#808080",
     textAlign: "center",
   },

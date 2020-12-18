@@ -55,7 +55,7 @@ export default function EventCard({ navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <ScrollView style={styles.scroll}>
+      <ScrollView style={scroll}>
         <TouchableOpacity
           /*style={styles.buttonCrear}*/
           onPress={() => navigation.navigate("CreateEvent")}
@@ -63,8 +63,17 @@ export default function EventCard({ navigation }) {
           <Text style={styles.buttonText1}> + Agregar Congreso</Text>
         </TouchableOpacity>
 
+        <TouchableOpacity
+          /*style={styles.buttonCrear}*/
+          onPress={() => navigation.navigate("DeleteEditEvent", navigation)}
+        >
+          <Text style={styles.buttonText1}> - Eliminar/Editar Congreso</Text>
+        </TouchableOpacity>
+
+        {/*<SearchBar navigation={navigation}/>*/}
         {data.congresos.map((congreso) => (
           <View key={congreso._id} style={styles.eventContainer}>
+            {console.log("CONGRESO", congreso)}
             <View style={styles.eventDetail}>
               <Text style={styles.titulo}>{congreso.titulo}</Text>
               {/* ver que onda esto */}
@@ -80,7 +89,7 @@ export default function EventCard({ navigation }) {
                 style={styles.button}
                 onPress={() =>
                   /*setFlag(!flag),*/
-                  navigation.navigate("Detail")
+                  navigation.navigate("Detail", { id: congreso._id })
                 }
               >
                 <Text style={styles.buttonText}> + </Text>
@@ -104,7 +113,6 @@ export default function EventCard({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  scroll,
   buttonCrear: {
     flex: 1,
     backgroundColor: "#bdeeff",

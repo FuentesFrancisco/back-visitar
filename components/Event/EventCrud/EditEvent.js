@@ -8,7 +8,7 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { AppLoading } from "expo";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { buildExecutionContext } from "graphql/execution/execute";
@@ -21,23 +21,41 @@ import {
 import { getImagen, takeImagen } from "../../pickImage/pick";
 
 const MUTATION = gql`
-  mutation addCongreso($input: CongresoInput) {
-    addCongreso(input: $input) {
+  mutation updateCongreso($input: CongresoInput) {
+    updateCongreso(input: $input) {
       titulo
     }
   }
 `;
-export default function CreateEvent({ navigation }) {
-  const [createCongreso, { loading, data, error, refetch }] = useMutation(
-    MUTATION
-  );
+const QUERY = gql`
+  query congreso($id: JSON) {
+    congreso(id: $id) {
+      _id
+      titulo
+      fecha
+      ubicacion
+      descripcion
+      imagen
+      especialidad
+    }
+  }
+`;
+export default function EditEvent({ navigation, route }) {
+  const [editCongreso, {}] = useMutation(MUTATION);
+
+  const { loading, data, error, refetch } = useQuery(QUERY, {
+    variables: route.params,
+  });
 
   let cargaImagen;
   let mutation = (values) => {
-    console.log(values);
-    createCongreso({
+    console.log("VALUES", values);
+    console.log("IMAGEN", cargaImagen);
+    console.log("PARAMS", route.params.id);
+    editCongreso({
       variables: {
         input: {
+          _id: route.params.id,
           titulo: values.titulo,
           descripcion: values.descripcion,
           ubicacion: values.ubicacion,
@@ -50,8 +68,9 @@ export default function CreateEvent({ navigation }) {
       /* modalidad: values.modalidad, */
     })
       .then((ans) => {
-        alert("Congreso creado");
+        alert("Cambios realizados");
       })
+      .then(() => navigation.goBack())
       .catch((err) => alert(err));
   };
   function cargarImagen() {
@@ -66,7 +85,6 @@ export default function CreateEvent({ navigation }) {
     console.log(imagen);
   }
 
-  /*   console.log(errors); */
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
@@ -77,9 +95,10 @@ export default function CreateEvent({ navigation }) {
   } else if (loading) {
     return <AppLoading />;
   } else {
+    console.log("DATOS CONGRESO", data.congreso);
     return (
       <View>
-        <Text style={styles.titulo}> Crear congreso </Text>
+        <Text style={styles.titulo}> Editar congreso </Text>
         <TouchableOpacity
           style={styles.buttonSend}
           onPress={() => navigation.goBack()}
@@ -88,13 +107,12 @@ export default function CreateEvent({ navigation }) {
         </TouchableOpacity>
         <Formik
           initialValues={{
-            titulo: "",
-            descripcion: "",
-            ubicacion: "",
-            especialidad: [""],
+            titulo: data.congreso.titulo,
+            descripcion: data.congreso.descripcion,
+            ubicacion: data.congreso.ubicacion,
+            especialidad: data.congreso.especialidad[0],
             /*    modalidad: "", */
-            imagen: [""],
-            fecha: "",
+            fecha: data.congreso.fecha[0],
           }}
           onSubmit={(values) => mutation(values)}
           /* validate={(values) => {
@@ -155,11 +173,13 @@ export default function CreateEvent({ navigation }) {
                   placeholder="Especialidad"
                 />
               </View>
-              {/*           <View style={styles.inputGroup}>
+              {/*       <View style={styles.inputGroup}>
                 <TextInput
                   onChangeText={handleChange("imagen")}
                   onBlur={handleBlur("imagen")}
-                  value={values.imagen}
+                  value={
+                    data.congreso.imagen[0] ? data.congreso.imagen[0] : null
+                  }
                   placeholder="Imagen"
                 />
               </View> */}
@@ -183,27 +203,19 @@ export default function CreateEvent({ navigation }) {
                 <Button
                   color="#7C88D5"
                   borderRadius="20"
-                  padding="10"
-                  title="Agregar una foto"
+                  title="Cambiar foto"
                   onPress={cargarImagen}
                 />
-
-                {/*     <Button
-                  title="Agregar una foto almacenada"
-                  onPress={cargarImagen}
-                />
-                <Button
+                {/*   <Button
                   color="#7C88D5"
                   borderRadius="20"
                   title="Agregar una foto con tu cámara"
                   onPress={cargarImagen2}
                 /> */}
-
                 <Button
                   color="#7C88D5"
                   borderRadius="20"
-                  padding="10"
-                  title="Crear"
+                  title="Confirmar cambios"
                   /* disabled={isSubmitting} */
                   onPress={(e) => handleSubmit(e)}
                 />
@@ -218,8 +230,7 @@ export default function CreateEvent({ navigation }) {
 
 const styles = StyleSheet.create({
   titulo: {
-    fontFamily: "Roboto_500Medium",
-    fontSize: 18,
+    fontSize: 15,
     marginBottom: 20,
     marginTop: 30,
     textAlign: "center",

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Formik, ErrorMessage } from "formik";
 import { StyleSheet, Button, TextInput, View, Text } from "react-native";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import "firebase/auth";
 import { gql, useMutation } from "@apollo/client";
 import { getImagen, takeImagen } from "../pickImage/pick";

@@ -129,7 +129,7 @@ export default function EventDetail({ route, navigation }) {
         <View style={styles.eventContainer}>
           <View style={styles.eventImg}>
             <Image
-              source={data.congreso.imagen[0] ? data.congreso.imagen[0] : image}
+              source={data.congreso.imagen ? data.congreso.imagen : image}
               style={styles.image}
             ></Image>
           </View>

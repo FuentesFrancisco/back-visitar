@@ -33,8 +33,10 @@
     "react-native-screens": "~2.10.1",
     "react-native-svg": "^12.1.0",
     "react-native-tab-view": "^2.15.2",
-    "react-native-unimodules": "^0.12.0",
-    "react-native-web": "~0.13.12"
+    "react-native-web": "~0.13.12",
+    "styled-components": "^5.2.1",
+    "toggle-switch-react-native": "^2.3.0",
+    "react-native-unimodules": "^0.12.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0"

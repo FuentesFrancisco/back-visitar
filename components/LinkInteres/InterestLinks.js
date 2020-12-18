@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import React, { useState } from "react";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { AppLoading } from "expo";
-import createLinks from "./CrudLink";
 import {
   StyleSheet,
   ScrollView,
   Text,
   View,
-  Image,
   TouchableOpacity,
 } from "react-native";
 import {
@@ -33,8 +31,19 @@ const QUERY = gql`
   }
 `;
 
+const MUTATION = gql`
+  mutation deleteLink($input: LinkInput) {
+    deleteLink(input: $input) {
+      titulo
+    }
+  }
+`;
+
 export default function InterestLinks({ navigation }) {
   const { loading, data, error, refetch } = useQuery(QUERY);
+  const [borrarLink, {}] = useMutation(MUTATION);
+
+  const [borrar, setBorrar] = useState(false);
   console.log(data);
 
   let [fontsLoaded] = useFonts({
@@ -52,7 +61,7 @@ export default function InterestLinks({ navigation }) {
         <View style={styles.bar}>
           <TouchableOpacity
             style={styles.iconContainer}
-            onPress={() => navigation.goBack()}
+            onPress={() => setBorrar(true)}
           >
             <Text>
               <BinIcon name="new" color="grey" size="32" />
@@ -98,9 +107,13 @@ export default function InterestLinks({ navigation }) {
         </View>
         <ScrollView style={styles.scroll2}>
           {data.links.map((link) => (
-            <TouchableOpacity onPress={() => Linking.openURL("https://" + link.link).catch((err) =>
+            <TouchableOpacity
+              onPress={() =>
+                Linking.openURL("https://" + link.link).catch((err) =>
                   console.error("An error occurred", err)
-                )}>
+                )
+              }
+            >
               <View style={styles.eventContainer}>
                 <View style={styles.eventDetail}>
                   <Text style={styles.titulo}>{link.titulo}</Text>
@@ -108,6 +121,21 @@ export default function InterestLinks({ navigation }) {
                   <Text style={styles.text}>{link.descripcion}</Text>
                   <Text style={styles.text}>{link.link}</Text>
                 </View>
+                {borrar ? (
+                  <TouchableOpacity
+                    style={styles.borrar}
+                    onPress={async () => {
+                      await borrarLink({
+                        variables: { input: { _id: link._id } },
+                      });
+                      refetch();
+                    }}
+                  >
+                    <Text style={styles.x}>
+                      <BinIcon name="new" color="white" size="28" />
+                    </Text>
+                  </TouchableOpacity>
+                ) : null}
               </View>
             </TouchableOpacity>
           ))}
@@ -171,14 +199,12 @@ const styles = StyleSheet.create({
   eventDetail: {
     flex: 4,
     flexWrap: "wrap",
-    /* backgroundColor: "blue",*/
     paddingTop: 15,
     paddingLeft: 10,
     paddingBottom: 15,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
     flexWrap: "wrap",
-
     paddingRight: 10,
   },
 
@@ -202,5 +228,20 @@ const styles = StyleSheet.create({
     width: "100%",
     color: "white",
     flex: 2,
+  },
+  borrar: {
+    padding: 5,
+    width: 30,
+    height: 30,
+    marginTop: "6%",
+    marginRight: "5%",
+    textAlign: "center",
+    justifyContent: "center",
+  },
+  x: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 18,
+    color: "#7C88D5",
+    justifyContent: "center",
   },
 });

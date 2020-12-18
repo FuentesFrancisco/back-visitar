@@ -93,7 +93,9 @@ export default function ChatCard({ navigation }) {
         <ScrollView style={styles.scroll2}>
           {/*<SearchBar navigation={navigation}/>*/}
           {/*aca  va un map de los chats*/}
-          <TouchableOpacity onPress={() => navigation.navigate("ChatDetail")}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("ChatDetail", { id: user })}
+          >
             <View style={styles.eventContainer}>
               <View style={styles.imgContainer}>
                 <Image source={image} style={styles.image}></Image>

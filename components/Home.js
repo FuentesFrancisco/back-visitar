@@ -2,7 +2,7 @@ import React from "react";
 import { AppLoading } from "expo";
 import useUser from "../components/Users/useUser";
 import { gql, useQuery } from "@apollo/client";
-
+import styled from "styled-components/native";
 import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import {
   useFonts,
@@ -11,13 +11,10 @@ import {
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
 
-import ValijaIcon from "./images/ValijaIcon";
-
 const image = {
   main_logo: require("./images/visitar.png"),
   doc: require("./images/doc1.png"),
 };
-
 const QUERY = gql`
   query usuarios($where: JSON) {
     usuarios(where: $where) {
@@ -49,7 +46,6 @@ export default function Home() {
     },
   });
   data && setUserDB(data);
-
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
