@@ -8,7 +8,7 @@ import CreateEvent from "./components/Event/EventCrud/CreateEvent";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import UserList from "./components/Users/UsersList";
-import * as firebase from "firebase";
+import firebase from "firebase/app";
 import { UserProvider } from "./components/Users/userContext";
 import "firebase/auth";
 import State from "./components/Users/State";
@@ -31,6 +31,7 @@ import InterestLinks from "./components/LinkInteres/InterestLinks";
 import AgregarTarea from "./components/Calendario/AgregarTarea";
 import FechaSeleccionada from "./components/Calendario/FechaSeleccionada";
 import EditEvent from "./components/Event/EventCrud/EditEvent";
+import AdminPanel from "./components/AdminPanel/AdminPanel";
 
 const Stack = createStackNavigator();
 
@@ -43,11 +44,8 @@ var firebaseConfig = {
   appId: "1:960314269839:web:c9130a27fd6f5848ac50fa",
   measurementId: "G-8Y4DCJFJ5Z",
 };
-if (!firebase.apps.length) {
-   firebase.initializeApp(firebaseConfig);
-}else {
-   firebase.app(); // if already initialized, use that one
-}
+
+firebase.initializeApp(firebaseConfig);
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -75,8 +73,6 @@ function App() {
   }, [setUser]);
   /* console.log(user); */
   return (
-    <View style={{height: "100%", marginTop: StatusBar.currentHeight, width: "100%", display: "flex"
-    }}>
     <ApolloProvider client={client}>
       {user === null ? (
         <Login />
@@ -159,6 +155,12 @@ function App() {
               component={AgregarTarea}
               options={{ headerShown: false }}
             />
+
+            {/*      <Stack.Screen
+              name="DeleteEvent"
+              component={DeleteEvent}
+              options={{ headerShown: false }}
+            /> */}
             <Stack.Screen
               name="createLinks"
               component={createLinks}
@@ -179,11 +181,15 @@ function App() {
               component={FechaSeleccionada}
               options={{ headerShown: false }}
             />
+            <Stack.Screen
+              name="AdminPanel"
+              component={AdminPanel}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       )}
     </ApolloProvider>
-    </View>
   );
 }
 

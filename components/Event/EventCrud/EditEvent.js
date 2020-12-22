@@ -19,6 +19,8 @@ import {
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
 import { getImagen, takeImagen } from "../../pickImage/pick";
+import Header from "../../Header/Header";
+import BackIcon from "../../images/BackIcon";
 
 const MUTATION = gql`
   mutation updateCongreso($input: CongresoInput) {
@@ -97,25 +99,26 @@ export default function EditEvent({ navigation, route }) {
   } else {
     console.log("DATOS CONGRESO", data.congreso);
     return (
-      <View style={styles.container}>
-        <Text style={styles.titulo}> Editar congreso </Text>
-        <TouchableOpacity
-          style={styles.buttonSend}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Volver</Text>
-        </TouchableOpacity>
-        <Formik
-          initialValues={{
-            titulo: data.congreso.titulo,
-            descripcion: data.congreso.descripcion,
-            ubicacion: data.congreso.ubicacion,
-            especialidad: data.congreso.especialidad[0],
-            /*    modalidad: "", */
-            fecha: data.congreso.fecha[0],
-          }}
-          onSubmit={(values) => mutation(values)}
-          /* validate={(values) => {
+      <View>
+        <Header></Header>
+        <View style={styles.view}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackIcon color="grey" size="32" />
+          </TouchableOpacity>
+          <Text style={styles.title}> Editar congreso </Text>
+        </View>
+        <View style={styles.container}>
+          <Formik
+            initialValues={{
+              titulo: data.congreso.titulo,
+              descripcion: data.congreso.descripcion,
+              ubicacion: data.congreso.ubicacion,
+              especialidad: data.congreso.especialidad[0],
+              /*    modalidad: "", */
+              fecha: data.congreso.fecha[0],
+            }}
+            onSubmit={(values) => mutation(values)}
+            /* validate={(values) => {
           const errors = {};
 
           if (!values.titulo) {
@@ -137,47 +140,51 @@ export default function EditEvent({ navigation, route }) {
           }
           return errors;
         }} */
-        >
-          {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <ScrollView style={styles.container}>
-              <View style={styles.inputGroup}>
-              <Text>Titulo</Text>
-                <TextInput
-                  onChangeText={handleChange("titulo")}
-                  onBlur={handleBlur("titulo")}
-                  value={values.titulo}
-                  placeholder="Título"
-                />
-              </View>
+          >
+            {({ handleChange, handleBlur, handleSubmit, values }) => (
+              <ScrollView style={styles.scroll}>
+                <View style={styles.inputGroup}>
+                  <Text>Titulo</Text>
+                  <TextInput
+                    style={styles.texto2}
+                    onChangeText={handleChange("titulo")}
+                    onBlur={handleBlur("titulo")}
+                    value={values.titulo}
+                    placeholder="Título"
+                  />
+                </View>
 
-              <View style={styles.inputGroup}>
-              <Text>Descripción</Text>
-                <TextInput
-                  onChangeText={handleChange("descripcion")}
-                  onBlur={handleBlur("descripcion")}
-                  value={values.descripcion}
-                  placeholder="Descripción"
-                />
-              </View>
-              <View style={styles.inputGroup}>
-              <Text>Ubicacion</Text>
-                <TextInput
-                  onChangeText={handleChange("ubicacion")}
-                  onBlur={handleBlur("ubicacion")}
-                  value={values.ubicacion}
-                  placeholder="Ubicación"
-                />
-              </View>
-              <View style={styles.inputGroup}>
-              <Text>Especialidad</Text>
-                <TextInput
-                  onChangeText={handleChange("especialidad")}
-                  onBlur={handleBlur("especialidad")}
-                  value={values.especialidad}
-                  placeholder="Especialidad"
-                />
-              </View>
-              {/*       <View style={styles.inputGroup}>
+                <View style={styles.inputGroup}>
+                  <Text>Descripción</Text>
+                  <TextInput
+                    style={styles.texto2}
+                    onChangeText={handleChange("descripcion")}
+                    onBlur={handleBlur("descripcion")}
+                    value={values.descripcion}
+                    placeholder="Descripción"
+                  />
+                </View>
+                <View style={styles.inputGroup}>
+                  <Text>Ubicacion</Text>
+                  <TextInput
+                    style={styles.texto2}
+                    onChangeText={handleChange("ubicacion")}
+                    onBlur={handleBlur("ubicacion")}
+                    value={values.ubicacion}
+                    placeholder="Ubicación"
+                  />
+                </View>
+                <View style={styles.inputGroup}>
+                  <Text>Especialidad</Text>
+                  <TextInput
+                    style={styles.texto2}
+                    onChangeText={handleChange("especialidad")}
+                    onBlur={handleBlur("especialidad")}
+                    value={values.especialidad}
+                    placeholder="Especialidad"
+                  />
+                </View>
+                {/*       <View style={styles.inputGroup}>
                 <TextInput
                   onChangeText={handleChange("imagen")}
                   onBlur={handleBlur("imagen")}
@@ -187,16 +194,17 @@ export default function EditEvent({ navigation, route }) {
                   placeholder="Imagen"
                 />
               </View> */}
-              <View style={styles.inputGroup}>
-              <Text>Fechas</Text>
-                <TextInput
-                  onChangeText={handleChange("fecha")}
-                  onBlur={handleBlur("fecha")}
-                  value={values.fecha}
-                  placeholder="Fechas"
-                />
-              </View>
-              {/*     <View style={styles.inputGroup}>
+                <View style={styles.inputGroup}>
+                  <Text>Fechas</Text>
+                  <TextInput
+                    style={styles.texto2}
+                    onChangeText={handleChange("fecha")}
+                    onBlur={handleBlur("fecha")}
+                    value={values.fecha}
+                    placeholder="Fechas"
+                  />
+                </View>
+                {/*     <View style={styles.inputGroup}>
                 <TextInput
                   onChangeText={handleChange("modalidad")}
                   onBlur={handleBlur("modalidad")}
@@ -204,36 +212,69 @@ export default function EditEvent({ navigation, route }) {
                   placeholder="modalidad"
                 />
               </View> */}
-              <View>
-                <Button
-                  color="#7C88D5"
-                  borderRadius="20"
-                  title="Cambiar foto"
-                  onPress={cargarImagen}
-                />
-                {/*   <Button
+                <View style={styles.buttonCont}>
+                  <TouchableOpacity
+                    onPress={cargarImagen}
+                    style={styles.buttonText1}
+                  >
+                    <Text style={styles.texto}>Cambiar foto</Text>
+                  </TouchableOpacity>
+
+                  {/*</View> <View>
+                  <Button
+                    color="#7C88D5"
+                    borderRadius="20"
+                    title="Cambiar foto"
+                    onPress={cargarImagen}
+               />*/}
+                  {/*   <Button
                   color="#7C88D5"
                   borderRadius="20"
                   title="Agregar una foto con tu cámara"
                   onPress={cargarImagen2}
                 /> */}
-                <Button
-                  color="#7C88D5"
-                  borderRadius="20"
-                  title="Confirmar cambios"
-                  /* disabled={isSubmitting} */
-                  onPress={(e) => handleSubmit(e)}
-                />
-              </View>
-            </ScrollView>
-          )}
-        </Formik>
+                  {/*} <Button
+                    color="#7C88D5"
+                    borderRadius="20"
+                    title="Confirmar cambios"
+                   
+                    {/*onPress={(e) => handleSubmit(e)}
+              />*/}
+                  <TouchableOpacity
+                    style={styles.buttonText1}
+                    onPress={(e) => handleSubmit(e)}
+                  >
+                    <Text style={styles.texto}>Guardar</Text>
+                  </TouchableOpacity>
+                </View>
+              </ScrollView>
+            )}
+          </Formik>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  view: {
+    display: "flex",
+    flexDirection: "row",
+    marginLeft: 20,
+    marginTop: 20,
+  },
+  scroll: {
+    height: "70%",
+    fontFamily: "Roboto_400Regular",
+    padding: 15,
+    borderRadius: 20,
+    marginTop: 20,
+    marginLeft: 10,
+    marginRight: 10,
+    borderWidth: 1,
+    borderColor: "#f5f2f2",
+    borderRadius: 20,
+  },
   titulo: {
     fontSize: 15,
     marginBottom: 20,
@@ -241,25 +282,25 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#7C88D5",
   },
-  container: {
+  /*container: {
     fontFamily: "Roboto_500Medium",
     flex: 1,
     padding: 15,
     borderRadius: 20,
     marginLeft: 10,
     marginRight: 10,
-    height:400,
+    height: "70%",
   },
-
+*/
   inputGroup: {
-    flex: 1,
+    /*flex: 1,*/
     padding: 5,
+    /*marginLeft: 5,
+    marginRight: 5,*/
     marginBottom: 10,
-    marginLeft: 5,
-    marginRight: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#d9d9d9",
-    height:50,
+    height: 60,
   },
   buttonText: {
     marginLeft: 10,
@@ -272,5 +313,36 @@ const styles = StyleSheet.create({
     textAlign: "center",
     borderRadius: 10,
   },
+  title: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 25,
+    color: "grey",
+    marginLeft: 20,
+  },
+  buttonCont: {
+    display: "flex",
+    flexDirection: "row",
+  },
+  buttonText1: {
+    fontFamily: "Roboto_500Medium",
+    backgroundColor: "#7C88D5",
+    padding: 5,
+    width: 150,
+    textAlign: "center",
+    borderRadius: 10,
+    height: 30,
+    textAlign: "center",
+    flex: 1,
+    margin: 10,
+  },
+  texto: {
+    color: "white",
+    fontFamily: "Roboto_500Medium",
+    fontSize: 15,
+    textAlign: "center",
+  },
+  texto2: {
+    fontFamily: "Roboto_100Thin",
+    color: "grey",
+  },
 });
-

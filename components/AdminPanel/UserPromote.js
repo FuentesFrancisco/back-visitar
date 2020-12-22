@@ -14,6 +14,7 @@ import {
   TextInput,
   Button,
 } from "react-native";
+import Header from "../Header/Header.js";
 
 // const useForceUpdate = () => useState()[1];
 
@@ -100,7 +101,9 @@ export default function UserPromote({ navigation }) {
     <>
       {/* <Text>Admin Options</Text>
         <br></br> */}
-      <View style={styles.container}>
+      <View>
+        <Header></Header>
+        <Text style={styles.title}>Rol de Usuarios</Text>
         <View style={styles.inputCont}>
           <TouchableOpacity
             style={styles.iconContainer}
@@ -124,14 +127,15 @@ export default function UserPromote({ navigation }) {
             }}
           />
         </View>
-        <ScrollView style={styles.scroll2}>
-          {data && data.usuarios
-            ? data.usuarios.map((usuario) => (
-                /* setBool({ ...bool, [usuario._id]: false }), */
-                <View
-                  key={usuario._id}
+        <View style={styles.container}>
+          <ScrollView style={styles.scroll2}>
+            {data && data.usuarios
+              ? data.usuarios.map((usuario) => (
+                  /* setBool({ ...bool, [usuario._id]: false }), */
+                  <View
+                    key={usuario._id}
 
-                  /* onPress={() =>
+                    /* onPress={() =>
                     navigation.navigate("ChatDetail", {
                       id: usuario._id,
                       nombre: usuario.nombre,
@@ -141,39 +145,40 @@ export default function UserPromote({ navigation }) {
                       laboratorio: usuario.laboratorio,
                     })
                   } */
-                >
-                  {(bool[usuario._id] = usuario.rol === "Mod")}
-                  <View style={styles.eventContainer}>
-                    <View style={styles.imgContainer}>
-                      <Image
-                        source={usuario.imagen}
-                        style={styles.image}
-                      ></Image>
-                    </View>
+                  >
+                    {(bool[usuario._id] = usuario.rol === "Mod")}
+                    <View style={styles.eventContainer}>
+                      <View style={styles.imgContainer}>
+                        <Image
+                          source={usuario.imagen}
+                          style={styles.image}
+                        ></Image>
+                      </View>
 
-                    <View style={styles.eventDetail}>
-                      <Text style={styles.titulo}>
-                        {usuario.nombre + " " + usuario.apellido}
-                      </Text>
+                      <View style={styles.eventDetail}>
+                        <Text style={styles.titulo}>
+                          {usuario.nombre + " " + usuario.apellido}
+                        </Text>
 
-                      <Text style={styles.text}>
-                        {usuario.especialidad + " - " + usuario.laboratorio}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text style={styles.text2}>{usuario.rol}</Text>
+                        <Text style={styles.text}>
+                          {usuario.especialidad + " - " + usuario.laboratorio}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text style={styles.text2}>{usuario.rol}</Text>
 
-                      <Switch
-                        value={bool[usuario._id]}
-                        style={{ marginRight: 13, marginBottom: 8 }}
-                        onValueChange={() => handleValueChange(usuario._id)}
-                      />
+                        <Switch
+                          value={bool[usuario._id]}
+                          style={{ marginRight: 13, marginBottom: 8 }}
+                          onValueChange={() => handleValueChange(usuario._id)}
+                        />
+                      </View>
                     </View>
                   </View>
-                </View>
-              ))
-            : null}
-        </ScrollView>
+                ))
+              : null}
+          </ScrollView>
+        </View>
       </View>
     </>
   );
@@ -186,7 +191,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#f5f2f2",
     borderRadius: 20,
-    marginTop: 100,
+    marginTop: 10,
     marginLeft: "2%",
     marginRight: "2%",
     lineHeight: 800,
@@ -202,18 +207,18 @@ const styles = StyleSheet.create({
   },
   scroll2: {
     width: "96%",
-    height: 470,
+    height: "65%",
     marginLeft: "2%",
     marginRight: "2%",
     marginBottom: 30,
     padding: 17,
-    marginTop: 30,
+    marginTop: 10,
   },
   iconContainer: {
     justifyContent: "center",
     flex: 1,
-    width:30,
-    height:30,
+    width: 30,
+    height: 30,
   },
   eventContainer: {
     flex: 1,
@@ -267,5 +272,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: 9,
     marginRight: 5,
+  },
+  title: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 25,
+    color: "grey",
+    marginLeft: 20,
+    marginTop: 20,
   },
 });

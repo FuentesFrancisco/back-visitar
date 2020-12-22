@@ -16,6 +16,8 @@ import {
 } from "@expo-google-fonts/roboto";
 import { AppLoading } from "expo";
 import { gql, useMutation } from "@apollo/client";
+import Header from "../Header/Header";
+import BackIcon from "../images/BackIcon";
 
 const MUTATION = gql`
   mutation addLink($input: LinkInput) {
@@ -58,76 +60,86 @@ export default function createLinks({ navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <Formik
-        initialValues={{
-          titulo: "",
-          descripcion: "",
-          link: "",
-        }}
-        onSubmit={(values) => mutation(values)}
-      >
-        {({ handleChange, handleBlur, handleSubmit, values }) => (
-          <View style={styles.container}>
-            <Text style={styles.title}> Crear Link de Interés </Text>
-            <TouchableOpacity
-              style={styles.buttonSend}
-              onPress={() => navigation.goBack()}
-            >
-              <Text style={styles.buttonText}>Volver</Text>
-            </TouchableOpacity>
+      <View>
+        <Header></Header>
+        <View style={styles.view}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <BackIcon color="grey" size="32" />
+          </TouchableOpacity>
+          <Text style={styles.title}> Crear Link </Text>
+        </View>
+        <Formik
+          initialValues={{
+            titulo: "",
+            descripcion: "",
+            link: "",
+          }}
+          onSubmit={(values) => mutation(values)}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values }) => (
+            <View style={styles.container}>
+              <View style={styles.inputGroup}>
+                <Text style={styles.titulo}>Título</Text>
+                <TextInput
+                  placeholder="Título"
+                  name="titulo"
+                  onBlur={handleBlur("titulo")}
+                  onChangeText={handleChange("titulo")}
+                  value={values.titulo}
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.titulo}>Descripción</Text>
+                <TextInput
+                  placeholder="Descripción"
+                  name="descripcion"
+                  onBlur={handleBlur("descripcion")}
+                  onChangeText={handleChange("descripcion")}
+                  value={values.descripcion}
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <Text style={styles.titulo}>URL Link</Text>
+                <TextInput
+                  placeholder="Url Link"
+                  name="link"
+                  onBlur={handleBlur("link")}
+                  onChangeText={handleChange("link")}
+                  value={values.link}
+                />
+              </View>
 
-            <View style={styles.inputGroup}>
-              <Text style={styles.titulo}>Título</Text>
-              <TextInput
-                placeholder="Título"
-                name="titulo"
-                onBlur={handleBlur("titulo")}
-                onChangeText={handleChange("titulo")}
-                value={values.titulo}
-              />
+              <TouchableOpacity
+                style={styles.buttonText1}
+                onPress={(e) => handleSubmit(e)}
+              >
+                <Text style={styles.texto}>Crear</Text>
+              </TouchableOpacity>
             </View>
-            <View style={styles.inputGroup}>
-              <Text style={styles.titulo}>Descripción</Text>
-              <TextInput
-                placeholder="Descripción"
-                name="descripcion"
-                onBlur={handleBlur("descripcion")}
-                onChangeText={handleChange("descripcion")}
-                value={values.descripcion}
-              />
-            </View>
-            <View style={styles.inputGroup}>
-              <Text style={styles.titulo}>URL Link</Text>
-              <TextInput
-                placeholder="Url Link"
-                name="link"
-                onBlur={handleBlur("link")}
-                onChangeText={handleChange("link")}
-                value={values.link}
-              />
-            </View>
-
-            <Button
-              color="#7C88D5"
-              borderRadius="20"
-              title="Crear"
-              onPress={(e) => handleSubmit(e)}
-            />
-          </View>
-        )}
-      </Formik>
+          )}
+        </Formik>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  view: {
+    display: "flex",
+    flexDirection: "row",
+    marginLeft: 20,
+  },
   container: {
-    fontFamily: "Roboto_500Medium",
-    flex: 1,
+    height: "70%",
+    fontFamily: "Roboto_400Regular",
     padding: 15,
     borderRadius: 20,
+    marginTop: 20,
     marginLeft: 10,
     marginRight: 10,
+    borderWidth: 1,
+    borderColor: "#f5f2f2",
+    borderRadius: 20,
   },
   title: {
     fontFamily: "Roboto_400Regular",
@@ -154,16 +166,28 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#d9d9d9",
   },
-  buttonText: {
-    marginLeft: 5,
-    marginBottom: 15,
+
+  title: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 25,
+    color: "grey",
+  },
+  buttonText1: {
     fontFamily: "Roboto_500Medium",
     backgroundColor: "#7C88D5",
-    color: "white",
     padding: 5,
-    width: 80,
+    width: 150,
     textAlign: "center",
     borderRadius: 10,
-    borderColor: "powderblue",
+    /*height: 30,*/
+    textAlign: "center",
+
+    margin: 10,
+  },
+  texto: {
+    color: "white",
+    fontFamily: "Roboto_500Medium",
+    fontSize: 15,
+    textAlign: "center",
   },
 });

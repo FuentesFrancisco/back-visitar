@@ -22,6 +22,7 @@ import NewIcon from "../images/NewIcon";
 import BinIcon from "../images/BinIcon";
 import { TextInput } from "react-native-gesture-handler";
 import SearchIcon from "../images/SearchIcon";
+import Header from "../Header/Header";
 
 const image = {
   uri:
@@ -41,7 +42,9 @@ export default function ChatCard({ navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <View style={styles.container}>
+      <View>
+        <Header></Header>
+        <Text style={styles.title}>Chat</Text>
         <View style={styles.bar}>
           <TouchableOpacity
             style={styles.iconContainer}
@@ -53,7 +56,7 @@ export default function ChatCard({ navigation }) {
           </TouchableOpacity>
           <View style={styles.inputCont}>
             <TextInput
-              placeholder="Buscar..."
+              placeholder={"Buscar..."}
               style={{
                 height: 35,
                 borderColor: "#c4c4c4",
@@ -90,138 +93,122 @@ export default function ChatCard({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-        <ScrollView style={styles.scroll2}>
-          {/*<SearchBar navigation={navigation}/>*/}
-          {/*aca  va un map de los chats*/}
-          <TouchableOpacity
-            onPress={() => navigation.navigate("ChatDetail", { id: user })}
-          >
-            <View style={styles.eventContainer}>
-              <View style={styles.imgContainer}>
-                <Image source={image} style={styles.image}></Image>
-              </View>
-              <View style={styles.eventDetail}>
-                <Text style={styles.titulo}>Estefania Bonessa</Text>
+        <View style={styles.container}>
+          <ScrollView style={styles.scroll2}>
+            {/*<SearchBar navigation={navigation}/>*/}
+            {/*aca  va un map de los chats*/}
+            <TouchableOpacity
+              onPress={() => navigation.navigate("ChatDetail", { id: user })}
+            >
+              <View style={styles.eventContainer}>
+                <View style={styles.imgContainer}>
+                  <Image source={image} style={styles.image}></Image>
+                </View>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>Estefania Bonessa</Text>
 
-                <Text style={styles.text}>
-                  Texto del mensaje (a definir cuantos ca...)
-                </Text>
+                  <Text style={styles.text}>Texto del mensaje</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.eventContainer}>
-              <View style={styles.imgContainer}>
-                <Image source={image} style={styles.image}></Image>
-              </View>
-              <View style={styles.eventDetail}>
-                <Text style={styles.titulo}>Estefania Bonessa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.eventContainer}>
+                <View style={styles.imgContainer}>
+                  <Image source={image} style={styles.image}></Image>
+                </View>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>Estefania Bonessa</Text>
 
-                <Text style={styles.text}>
-                  Texto del mensaje (a definir cuantos ca...)
-                </Text>
+                  <Text style={styles.text}>Texto del mensaje</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.eventContainer}>
-              <View style={styles.imgContainer}>
-                <Image source={image} style={styles.image}></Image>
-              </View>
-              <View style={styles.eventDetail}>
-                <Text style={styles.titulo}>Estefania Bonessa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.eventContainer}>
+                <View style={styles.imgContainer}>
+                  <Image source={image} style={styles.image}></Image>
+                </View>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>Estefania Bonessa</Text>
 
-                <Text style={styles.text}>
-                  Texto del mensaje (a definir cuantos ca...)
-                </Text>
+                  <Text style={styles.text}>Texto del mensaje</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.eventContainer}>
-              <View style={styles.imgContainer}>
-                <Image source={image} style={styles.image}></Image>
-              </View>
-              <View style={styles.eventDetail}>
-                <Text style={styles.titulo}>Estefania Bonessa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.eventContainer}>
+                <View style={styles.imgContainer}>
+                  <Image source={image} style={styles.image}></Image>
+                </View>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>Estefania Bonessa</Text>
 
-                <Text style={styles.text}>
-                  Texto del mensaje (a definir cuantos ca...)
-                </Text>
+                  <Text style={styles.text}>Texto del mensaje</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.eventContainer}>
-              <View style={styles.imgContainer}>
-                <Image source={image} style={styles.image}></Image>
-              </View>
-              <View style={styles.eventDetail}>
-                <Text style={styles.titulo}>Estefania Bonessa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.eventContainer}>
+                <View style={styles.imgContainer}>
+                  <Image source={image} style={styles.image}></Image>
+                </View>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>Estefania Bonessa</Text>
 
-                <Text style={styles.text}>
-                  Texto del mensaje (a definir cuantos ca...)
-                </Text>
+                  <Text style={styles.text}>Texto del mensaje</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.eventContainer}>
-              <View style={styles.imgContainer}>
-                <Image source={image} style={styles.image}></Image>
-              </View>
-              <View style={styles.eventDetail}>
-                <Text style={styles.titulo}>Estefania Bonessa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.eventContainer}>
+                <View style={styles.imgContainer}>
+                  <Image source={image} style={styles.image}></Image>
+                </View>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>Estefania Bonessa</Text>
 
-                <Text style={styles.text}>
-                  Texto del mensaje (a definir cuantos ca...)
-                </Text>
+                  <Text style={styles.text}>Texto del mensaje</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.eventContainer}>
-              <View style={styles.imgContainer}>
-                <Image source={image} style={styles.image}></Image>
-              </View>
-              <View style={styles.eventDetail}>
-                <Text style={styles.titulo}>Estefania Bonessa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.eventContainer}>
+                <View style={styles.imgContainer}>
+                  <Image source={image} style={styles.image}></Image>
+                </View>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>Estefania Bonessa</Text>
 
-                <Text style={styles.text}>
-                  Texto del mensaje (a definir cuantos ca...)
-                </Text>
+                  <Text style={styles.text}>Texto del mensaje</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.eventContainer}>
-              <View style={styles.imgContainer}>
-                <Image source={image} style={styles.image}></Image>
-              </View>
-              <View style={styles.eventDetail}>
-                <Text style={styles.titulo}>Estefania Bonessa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.eventContainer}>
+                <View style={styles.imgContainer}>
+                  <Image source={image} style={styles.image}></Image>
+                </View>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>Estefania Bonessa</Text>
 
-                <Text style={styles.text}>
-                  Texto del mensaje (a definir cuantos ca...)
-                </Text>
+                  <Text style={styles.text}>Texto del mensaje</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <View style={styles.eventContainer}>
-              <View style={styles.imgContainer}>
-                <Image source={image} style={styles.image}></Image>
-              </View>
-              <View style={styles.eventDetail}>
-                <Text style={styles.titulo}>Estefania Bonessa</Text>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <View style={styles.eventContainer}>
+                <View style={styles.imgContainer}>
+                  <Image source={image} style={styles.image}></Image>
+                </View>
+                <View style={styles.eventDetail}>
+                  <Text style={styles.titulo}>Estefania Bonessa</Text>
 
-                <Text style={styles.text}>
-                  Texto del mensaje (a definir cuantos ca...)
-                </Text>
+                  <Text style={styles.text}>Texto del mensaje</Text>
+                </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        </ScrollView>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
       </View>
     );
   }
@@ -234,7 +221,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#f5f2f2",
     borderRadius: 20,
-    marginTop: 100,
+    marginTop: 10,
     marginLeft: "2%",
     marginRight: "2%",
     lineHeight: 800,
@@ -244,6 +231,8 @@ const styles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
     alignContent: "space-around",
+    marginTop: 20,
+    marginBottom: 20,
   },
   iconContainer: {
     flex: 1,
@@ -262,7 +251,7 @@ const styles = StyleSheet.create({
   },
   scroll2: {
     width: "96%",
-    height: 470,
+    height: "62%",
     marginLeft: "2%",
     marginRight: "2%",
     marginBottom: 30,
@@ -299,6 +288,8 @@ const styles = StyleSheet.create({
     borderRadius: 70,
     marginRight: 15,
     margin: 7,
+    borderColor: "white",
+    borderWidth: 1,
   },
   titulo: {
     fontFamily: "Roboto_500Medium",
@@ -311,5 +302,12 @@ const styles = StyleSheet.create({
     width: "100%",
     color: "white",
     flex: 2,
+  },
+  title: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 25,
+    color: "grey",
+    marginLeft: 20,
+    marginTop: 20,
   },
 });

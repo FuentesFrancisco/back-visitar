@@ -6,134 +6,82 @@ import {
   TouchableHighlight,
   Text,
   StyleSheet,
-  ScrollView
+  ScrollView,
 } from "react-native";
+import Header from "../Header/Header";
 
-const UserPromote = styled.TouchableOpacity`
-  border-radius: 12px;
-  border-color: powderblue;
-  border-width: 1px;
+const Boton = styled.TouchableOpacity`
+  border-radius: 20px;
   color: palevioletred;
-  padding: 5px;
   text-align: center;
-  background-color: #7c88d5;
-  margin: 10px;
-  width: 95%;
-  height: 40px;
-`;
-
-const EditCongresos = styled.TouchableOpacity`
-  border-radius: 12px;
-  border-color: powderblue;
-  border-width: 1px;
-  color: palevioletred;
-  padding: 5px;
-  text-align: center;
-  background-color: #7c88d5;
-  margin: 10px;
-  width: 95%;
-  height: 40px;
-`;
-
-const CreateCongresos = styled.TouchableOpacity`
-  border-radius: 12px;
-  border-color: powderblue;
-  border-width: 1px;
-  color: palevioletred;
-  padding: 5px;
-  text-align: center;
-  background-color: #7c88d5;
-  margin: 10px;
-  width: 95%;
-  height: 40px;
-`;
-
-const Answers = styled.TouchableOpacity`
-  border-radius: 12px;
-  border-color: powderblue;
-  border-width: 1px;
-  color: palevioletred;
-  padding: 5px;
-  text-align: center;
-  background-color: #7c88d5;
-  margin: 10px;
-  width: 95%;
-  height: 40px;
-`;
-
-const CreateLinks = styled.TouchableOpacity`
-  border-radius: 12px;
-  border-color: powderblue;
-  border-width: 1px;
-  color: palevioletred;
-  padding: 5px;
-  text-align: center;
-  background-color: #7c88d5;
-  margin: 10px;
-  width: 95%;
-  height: 40px;
-`;
-
-const DeleteLinks = styled.TouchableOpacity`
-  border-radius: 12px;
-  border-color: powderblue;
-  border-width: 1px;
-  color: palevioletred;
-  padding: 5px;
-  text-align: center;
-  background-color: #7c88d5;
-  margin: 10px;
-  width: 95%;
-  height: 40px;
+  background-color: white;
+  margin: 5px;
+  margin-right: 5%;
+  margin-left: 5%;
+  width: 90%;
+  height: 50px;
 `;
 
 export default function AdminPanel({ navigation }) {
   return (
+    <View>
+      <Header></Header>
+      <Text style={styles.titulo}> Administrador </Text>
+      <View style={styles.container}>
+        <Boton onPress={() => navigation.navigate("UserPromote")}>
+          <Text style={styles.text}>Cambiar rol de usuarios</Text>
+        </Boton>
 
-    <ScrollView style={styles.container}>
-      <Text style={styles.titulo}> Panel de Administrador </Text>
-      <UserPromote onPress={() => navigation.navigate("UserPromote")}>
-        <Text style={styles.text}>Cambiar rol de usuarios</Text>
-      </UserPromote>
+        <Boton onPress={() => navigation.navigate("CreateEvent")}>
+          <Text style={styles.text}>Crear congreso</Text>
+        </Boton>
 
-      <CreateCongresos onPress={() => navigation.navigate("CreateEvent")}>
-        <Text style={styles.text}>Crear congreso</Text>
-      </CreateCongresos>
+        <Boton onPress={() => navigation.navigate("DeleteEditEvent")}>
+          <Text style={styles.text}>Eliminar/Editar Congresos</Text>
+        </Boton>
 
-      <EditCongresos onPress={() => navigation.navigate("DeleteEditEvent")}>
-        <Text style={styles.text}>Eliminar/Editar Congresos</Text>
-      </EditCongresos>
+        <Boton onPress={() => navigation.navigate("createLinks")}>
+          <Text style={styles.text}>Crear links</Text>
+        </Boton>
 
-      <CreateLinks onPress={() => navigation.navigate("createLinks")}>
-        <Text style={styles.text}>Crear links</Text>
-      </CreateLinks>
+        <Boton
+          onPress={() => navigation.navigate("InterestLinks", { admin: true })}
+        >
+          <Text style={styles.text}>Eliminar/Editar Links</Text>
+        </Boton>
 
-      <DeleteLinks
-        onPress={() => navigation.navigate("InterestLinks", { admin: true })}
-      >
-        <Text style={styles.text}>Eliminar/Editar Links</Text>
-      </DeleteLinks>
-
-      {/* <Answers  onPress={() => navigation.navigate("UserPromote")} >
+        {/* <Answers  onPress={() => navigation.navigate("UserPromote")} >
         <Text style={styles.text}>Respuestas</Text>
       </Answers> */}
-    </ScrollView>
+      </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     width: "96%",
-    height: 450,
+    height: "75%",
     display: "flex",
     borderWidth: 1,
     borderColor: "#f5f2f2",
     borderRadius: 20,
-    marginTop: 100,
+    marginTop: 10,
+    paddingTop: 20,
     marginLeft: "2%",
     marginRight: "2%",
     lineHeight: 800,
     textAlign: "center",
+    backgroundColor: "#7C88D5",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+
+    elevation: 8,
   },
 
   scroll2: {
@@ -180,19 +128,21 @@ const styles = StyleSheet.create({
     margin: 7,
   },
   titulo: {
-    fontFamily: "Roboto_400Regular",
-    fontSize: 18,
-    color: "#7c88d5",
-    flex: 1,
-    marginBottom: 20,
+    fontFamily: "Roboto_500Medium",
+    fontSize: 28,
     marginTop: 20,
+    marginBottom: 10,
+    marginLeft: 20,
+    color: "grey",
   },
   text: {
     fontFamily: "Roboto_400Regular",
     width: "100%",
-    color: "white",
+    color: "grey",
     fontSize: 15,
     flex: 2,
+    textAlign: "center",
+    textAlignVertical: "center",
   },
   text2: {
     fontFamily: "Roboto_100Thin",
@@ -204,4 +154,3 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
 });
-

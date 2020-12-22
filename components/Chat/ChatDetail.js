@@ -19,11 +19,9 @@ import {
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
 import SendIcon from "../images/SendIcon";
+import Header from "../Header/Header";
 
-const image = {
-  uri:
-    "https://www.hqts.com/wp-content/uploads/2020/04/Pharmaceutical-Materials-no-logo-01-1110x550.jpg",
-};
+let image = require("../images/bag.png");
 
 export default function ChatDetail({ route, navigation }) {
   console.log(route.params);
@@ -36,84 +34,90 @@ export default function ChatDetail({ route, navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <View style={styles.container}>
-        <View style={styles.eventContainer}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={() => navigation.goBack()}
-          >
-            <BackIcon name="back" color="grey" size="24" />
-          </TouchableOpacity>
-          <View style={styles.imgContainer}>
-            <Image source={route.params.imagen} style={styles.image}></Image>
+      <View>
+        <Header></Header>
+        <View style={styles.container}>
+          <View style={styles.eventContainer}>
+            <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => navigation.goBack()}
+            >
+              <BackIcon name="back" color="grey" size="24" />
+            </TouchableOpacity>
+            <View style={styles.imgContainer}>
+              <Image
+                source={route.params.imagen ? route.params.imagen : image}
+                style={styles.image}
+              ></Image>
+            </View>
+            <View style={styles.eventDetail}>
+              <Text style={styles.titulo}>
+                {route.params.nombre + " " + route.params.apellido}
+              </Text>
+              <Text style={styles.subTitulo}>
+                {route.params.especialidad + " - " + route.params.laboratorio}
+              </Text>
+            </View>
           </View>
-          <View style={styles.eventDetail}>
-            <Text style={styles.titulo}>
-              {route.params.nombre + " " + route.params.apellido}
-            </Text>
-            <Text style={styles.subTitulo}>
-              {route.params.especialidad + " - " + route.params.laboratorio}
-            </Text>
+          <ScrollView style={styles.scroll2}>
+            {/*aca necesitamos un map de todos los mensajes*/}
+            <View>
+              <Text style={styles.out}>
+                Hola! <Text style={styles.time}>15:54</Text>
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.in}>
+                Qué Tal?? <Text style={styles.time}>15:54</Text>
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.out}>
+                Bien! <Text style={styles.time}>15:54</Text>
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.in}>
+                Vas a ir al proximo congreso de Agentes de propaganda Medica?{" "}
+                <Text style={styles.time}>15:55</Text>
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.out}>
+                Cuando es? <Text style={styles.time}>15:55</Text>
+              </Text>
+            </View>
+            <View>
+              <Text style={styles.in}>
+                En febrero, en la ciudad de mendoza{" "}
+                <Text style={styles.time}>15:58</Text>
+              </Text>
+            </View>
+          </ScrollView>
+          <View style={styles.input}>
+            <TextInput
+              style={{
+                height: 40,
+                borderColor: "gray",
+                borderRadius: 20,
+                borderWidth: 1,
+                flex: 9,
+                marginTop: 10,
+                marginRight: 10,
+                marginBottom: 10,
+              }}
+            ></TextInput>
+            <TouchableOpacity
+              onPress={() => alert("enviar")}
+              style={{
+                flex: 1,
+                justifyContent: "center",
+                marginLeft: 5,
+              }}
+            >
+              <SendIcon name="back" color="grey" size="28" />
+            </TouchableOpacity>
           </View>
-        </View>
-        <ScrollView style={styles.scroll2}>
-          {/*aca necesitamos un map de todos los mensajes*/}
-          <View>
-            <Text style={styles.out}>
-              Hola! <Text style={styles.time}>15:54</Text>
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.in}>
-              Qué Tal?? <Text style={styles.time}>15:54</Text>
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.out}>
-              Bien! <Text style={styles.time}>15:54</Text>
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.in}>
-              Vas a ir al proximo congreso de Agentes de propaganda Medica?{" "}
-              <Text style={styles.time}>15:55</Text>
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.out}>
-              Cuando es? <Text style={styles.time}>15:55</Text>
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.in}>
-              En febrero, en la ciudad de mendoza{" "}
-              <Text style={styles.time}>15:58</Text>
-            </Text>
-          </View>
-        </ScrollView>
-        <View style={styles.input}>
-          <TextInput
-            style={{
-              height: 40,
-              borderColor: "gray",
-              borderRadius: 20,
-              borderWidth: 1,
-              flex: 9,
-              marginTop: 10,
-              marginRight: 10,
-              marginBottom: 10,
-            }}
-          ></TextInput>
-          <TouchableOpacity
-            onPress={() => alert("enviar")}
-            style={{
-              flex: 1,
-              justifyContent: "center",
-              marginLeft: 5,
-            }}
-          >
-            <SendIcon name="back" color="grey" size="28" />
-          </TouchableOpacity>
         </View>
       </View>
     );
@@ -121,46 +125,42 @@ export default function ChatDetail({ route, navigation }) {
 }
 
 const styles = StyleSheet.create({
-  scroll2: {
-    width: "96%",
-    height: 400,
-    marginLeft: "2%",
-    marginRight: "2%",
-    marginBottom: 30,
-    padding: 2,
-  },
   container: {
     width: "96%",
+    height: "85%",
     display: "flex",
     borderWidth: 1,
     borderColor: "#f5f2f2",
     borderRadius: 20,
-    marginTop: 10,
+    marginTop: 20,
     marginLeft: "2%",
     marginRight: "2%",
   },
   iconContainer: {
     justifyContent: "center",
+    marginRight: 10,
   },
   eventContainer: {
     flex: 1,
     flexDirection: "row",
-    marginBottom: 20,
+    marginBottom: 10,
     borderBottomColor: "#f5f2f2",
     borderBottomWidth: 2,
     marginLeft: "2%",
     marginRight: "2%",
   },
   eventDetail: {
-    flex: 4,
-    flexWrap: "wrap",
-    paddingTop: 20,
+    paddingTop: 10,
     paddingLeft: 10,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
-    flexWrap: "wrap",
+    /*flexWrap: "wrap",*/
     paddingRight: 10,
     justifyContent: "center",
+  },
+  imgContainer: {
+    height: 60,
+    marginTop: 10,
   },
 
   image: {
@@ -170,7 +170,14 @@ const styles = StyleSheet.create({
     width: 60,
     borderRadius: 70,
     marginRight: 15,
-    margin: 7,
+  },
+  scroll2: {
+    width: "96%",
+    height: "60%",
+    marginLeft: "2%",
+    marginRight: "2%",
+    marginBottom: 30,
+    padding: 2,
   },
   titulo: {
     fontFamily: "Roboto_400Regular",

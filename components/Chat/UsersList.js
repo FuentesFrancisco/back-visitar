@@ -22,6 +22,7 @@ import NewIcon from "../images/NewIcon";
 import BinIcon from "../images/BinIcon";
 import { TextInput } from "react-native-gesture-handler";
 import SearchIcon from "../images/SearchIcon";
+import Header from "../Header/Header";
 
 const QUERY = gql`
   query usuarios($where: JSON) {
@@ -43,6 +44,7 @@ const image = {
 
 export default function UsersList({ navigation }) {
   const [search, setSearch] = useState("");
+  let image = require("../images/bag.png");
 
   const handleChange = (e) => {
     console.log("e", e);
@@ -66,7 +68,9 @@ export default function UsersList({ navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <View style={styles.container}>
+      <View>
+        <Header></Header>
+        <Text style={styles.title}>Nuevo Mensaje</Text>
         <View style={styles.inputCont}>
           <TouchableOpacity
             style={styles.iconContainer}
@@ -101,44 +105,46 @@ export default function UsersList({ navigation }) {
             />
             </TouchableOpacity>*/}
         </View>
-        <ScrollView style={styles.scroll2}>
-          {data
-            ? data.usuarios.map((usuario) => (
-                <TouchableOpacity
-                  key={usuario._id}
-                  onPress={() =>
-                    navigation.navigate("ChatDetail", {
-                      id: usuario._id,
-                      nombre: usuario.nombre,
-                      apellido: usuario.apellido,
-                      imagen: usuario.imagen,
-                      especialidad: usuario.especialidad,
-                      laboratorio: usuario.laboratorio,
-                    })
-                  }
-                >
-                  <View style={styles.eventContainer}>
-                    <View style={styles.imgContainer}>
-                      <Image
-                        source={usuario.imagen}
-                        style={styles.image}
-                      ></Image>
-                    </View>
+        <View style={styles.container}>
+          <ScrollView style={styles.scroll2}>
+            {data
+              ? data.usuarios.map((usuario) => (
+                  <TouchableOpacity
+                    key={usuario._id}
+                    onPress={() =>
+                      navigation.navigate("ChatDetail", {
+                        id: usuario._id,
+                        nombre: usuario.nombre,
+                        apellido: usuario.apellido,
+                        imagen: usuario.imagen,
+                        especialidad: usuario.especialidad,
+                        laboratorio: usuario.laboratorio,
+                      })
+                    }
+                  >
+                    <View style={styles.eventContainer}>
+                      <View style={styles.imgContainer}>
+                        <Image
+                          source={usuario.imagen ? usuario.imagen : image}
+                          style={styles.image}
+                        ></Image>
+                      </View>
 
-                    <View style={styles.eventDetail}>
-                      <Text style={styles.titulo}>
-                        {usuario.nombre + " " + usuario.apellido}
-                      </Text>
+                      <View style={styles.eventDetail}>
+                        <Text style={styles.titulo}>
+                          {usuario.nombre + " " + usuario.apellido}
+                        </Text>
 
-                      <Text style={styles.text}>
-                        {usuario.especialidad + " - " + usuario.laboratorio}
-                      </Text>
+                        <Text style={styles.text}>
+                          {usuario.especialidad + " - " + usuario.laboratorio}
+                        </Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableOpacity>
-              ))
-            : null}
-        </ScrollView>
+                  </TouchableOpacity>
+                ))
+              : null}
+          </ScrollView>
+        </View>
       </View>
     );
   }
@@ -147,18 +153,20 @@ export default function UsersList({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     width: "96%",
+    height: "70%",
     display: "flex",
     borderWidth: 1,
     borderColor: "#f5f2f2",
     borderRadius: 20,
-    marginTop: 100,
+    marginTop: 10,
     marginLeft: "2%",
     marginRight: "2%",
     lineHeight: 800,
   },
   inputCont: {
-    marginTop: 30,
+    marginTop: 50,
     marginLeft: "10%",
+    marginBottom: 20,
     marginRight: "10%",
     display: "flex",
     flexDirection: "row",
@@ -220,5 +228,12 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 10,
     flex: 2,
+  },
+  title: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 25,
+    color: "grey",
+    marginLeft: 20,
+    marginTop: 20,
   },
 });

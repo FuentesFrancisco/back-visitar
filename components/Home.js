@@ -1,8 +1,10 @@
 import React from "react";
 import { AppLoading } from "expo";
 import useUser from "../components/Users/useUser";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 import styled from "styled-components/native";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
 import { StyleSheet, Text, View, ImageBackground } from "react-native";
 import {
   useFonts,
@@ -10,10 +12,13 @@ import {
   Roboto_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
+import Header from "./Header/Header";
+import { Image } from "react-native";
 
 const image = {
   main_logo: require("./images/visitar.png"),
   doc: require("./images/doc1.png"),
+  logo: require("./images/logoblanco.png"),
 };
 const QUERY = gql`
   query usuarios($where: JSON) {
@@ -34,6 +39,14 @@ const QUERY = gql`
   }
 `;
 
+const EXPOTOKEN = gql`
+  mutation updateUsuario($input: UsuarioInput) {
+    updateUsuario(input: $input) {
+      expoToken
+    }
+  }
+`;
+
 export default function Home() {
   const { user, userDB, setUserDB } = useUser();
   let uid;
@@ -46,7 +59,36 @@ export default function Home() {
     },
   });
   data && setUserDB(data);
-  
+
+  const [updateToken] = useMutation(EXPOTOKEN);
+
+  async function registerForPushNotification() {
+    const { status } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+    if (status != "granted") {
+      const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    }
+    if (status !== "granted") {
+      alert("Failed to get push token for push notification!");
+      return;
+    }
+    token = (await Notifications.getExpoPushTokenAsync()).data;
+    // token = (await Notifications.getDevicePushTokenAsync()).data;
+    return token;
+  }
+
+  useEffect(() => {
+    userDB &&
+      registerForPushNotification()
+        .then((token) =>
+          updateToken({
+            variables: {
+              input: { _id: userDB.usuarios[0]._id, expoToken: token },
+            },
+          })
+        )
+        .catch((err) => console.log(err));
+  }, [userDB]);
+
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
@@ -56,20 +98,27 @@ export default function Home() {
     return <AppLoading />;
   } else {
     return (
-      <ImageBackground source={image.doc} style={styles.image}>
-        <View style={styles.textCont}>
-          <Text style={styles.text}>
-            Trabajar cada visita como una oportunidad
-          </Text>
-          <Text style={styles.text2}>
-            Crear redes que transmitan la mejor información científica
-            disponible a quienes deseen desarrollar su máximo potencial para
-            profesionalizar con las mejores herramientas disponibles en el
-            mercado a los Agentes de Propaganda Medica y Representantes de
-            ventas en Farmacias
-          </Text>
-        </View>
-      </ImageBackground>
+      <>
+        <ImageBackground source={image.doc} style={styles.image}>
+          <Image
+            source={image.logo}
+            style={{ width: 120, height: 60, marginLeft: 20 }}
+          />
+
+          <View style={styles.textCont}>
+            <Text style={styles.text}>
+              Trabajar cada visita como una oportunidad
+            </Text>
+            <Text style={styles.text2}>
+              Crear redes que transmitan la mejor información científica
+              disponible a quienes deseen desarrollar su máximo potencial para
+              profesionalizar con las mejores herramientas disponibles en el
+              mercado a los Agentes de Propaganda Medica y Representantes de
+              ventas en Farmacias
+            </Text>
+          </View>
+        </ImageBackground>
+      </>
     );
   }
 }

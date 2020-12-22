@@ -1,7 +1,14 @@
 import React, { useCallback, useState } from "react";
 import { Formik, ErrorMessage } from "formik";
-import { StyleSheet, Button, TextInput, View, Text, ScrollView } from "react-native";
-import * as firebase from "firebase";
+import {
+  StyleSheet,
+  Button,
+  TextInput,
+  View,
+  Text,
+  ScrollView,
+} from "react-native";
+import firebase from "firebase/app";
 import "firebase/auth";
 import { gql, useMutation } from "@apollo/client";
 import { getImagen, takeImagen } from "../pickImage/pick";
@@ -223,8 +230,8 @@ function Login(props) {
             onPress={() => setTask("Registrarse")}
             title={"Registrarse"}
           />
-          <ScrollView style={styles.margen}>
-            <Text style={styles.text}>Email</Text>
+          <View style={styles.margen}>
+            <Text>Email</Text>
             <TextInput
               style={styles.inputGroup}
               name="emailRegister"
@@ -239,7 +246,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text style={styles.text}>Password</Text>
+            <Text>Password</Text>
             <TextInput
               style={styles.inputGroup}
               name="passwordRegister"
@@ -254,7 +261,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text style={styles.text}>Nombre</Text>
+            <Text>Nombre</Text>
             <TextInput
               style={styles.inputGroup}
               name="nombre"
@@ -268,7 +275,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text style={styles.text}>Apellido</Text>
+            <Text>Apellido</Text>
             <TextInput
               style={styles.inputGroup}
               name="apellido"
@@ -281,7 +288,7 @@ function Login(props) {
               name="apellido"
               component={Text}
             />
-            <Text style={styles.text}>Teléfono</Text>
+            <Text>Teléfono</Text>
             <TextInput
               style={styles.inputGroup}
               name="telefono"
@@ -297,7 +304,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text style={styles.text}>Provincia</Text>
+            <Text>Provincia</Text>
             <TextInput
               style={styles.inputGroup}
               name="provincia"
@@ -311,7 +318,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text style={styles.text}>Matrícula</Text>
+            <Text>Matrícula</Text>
             <TextInput
               style={styles.inputGroup}
               name="matricula"
@@ -325,7 +332,7 @@ function Login(props) {
               name="matricula"
               component={Text}
             />
-            <Text style={styles.text}>Laboratorio</Text>
+            <Text>Laboratorio</Text>
             <TextInput
               style={styles.inputGroup}
               name="laboratorio"
@@ -339,7 +346,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text style={styles.text}>Especialidad</Text>
+            <Text>Especialidad</Text>
             <TextInput
               style={styles.inputGroup}
               name="especialidad"
@@ -352,7 +359,7 @@ function Login(props) {
               name="especialidad"
               component={Text}
             />
-          </ScrollView>
+          </View>
           <Button
             color="#7C88D5"
             borderRadius="20"

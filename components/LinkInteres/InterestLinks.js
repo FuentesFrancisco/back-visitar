@@ -20,6 +20,8 @@ import BinIcon from "../images/BinIcon";
 import { TextInput } from "react-native-gesture-handler";
 import SearchIcon from "../images/SearchIcon";
 import * as Linking from "expo-linking";
+import Header from "../Header/Header";
+import BackIcon from "../images/BackIcon";
 
 const QUERY = gql`
   query links {
@@ -62,27 +64,31 @@ export default function InterestLinks({ navigation, route }) {
     return <AppLoading />;
   } else {
     return (
-      <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.buttonSend}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Volver</Text>
-        </TouchableOpacity>
-        <View style={styles.bar}>
-          {adm && adm ? (
-            <TouchableOpacity
-              style={styles.iconContainer}
-              onPress={() => setBorrar(true)}
-            >
-              <Text>
-                <BinIcon name="new" color="grey" size="32" />
-              </Text>
-            </TouchableOpacity>
-          ) : null}
+      <View style={styles.total}>
+        <Header></Header>
+        <View style={styles.view}>
+          <TouchableOpacity
+            style={styles.buttonSend}
+            onPress={() => navigation.goBack()}
+          >
+            <BackIcon color="grey" size="32" />
+          </TouchableOpacity>
+          <Text style={styles.title}>Links de Interés</Text>
+        </View>
+        <View style={styles.container}>
+          <View style={styles.bar}>
+            {adm && adm ? (
+              <TouchableOpacity
+                style={styles.iconContainer}
+                onPress={() => setBorrar(true)}
+              >
+                <Text>
+                  <BinIcon name="new" color="grey" size="32" />
+                </Text>
+              </TouchableOpacity>
+            ) : null}
 
-          <Text style={styles.title}> Links de interés </Text>
-          {/*           <View style={styles.inputCont}>
+            {/*           <View style={styles.inputCont}>
             <TextInput
               placeholder="Buscar..."
               style={{
@@ -111,65 +117,80 @@ export default function InterestLinks({ navigation, route }) {
               />
             </TouchableOpacity>
           </View> */}
-          {adm && adm ? (
-            <TouchableOpacity
-              style={styles.iconContainerLeft}
-              onPress={() => navigation.navigate("createLinks")}
-            >
-              <Text style={styles.editar}>
-                <NewIcon name="new" color="white" size="28" />
-              </Text>
-            </TouchableOpacity>
-          ) : null}
-        </View>
-        <ScrollView style={styles.scroll2}>
-          {data.links.map((link) => (
-            <TouchableOpacity
-              onPress={() =>
-                Linking.openURL("https://" + link.link).catch((err) =>
-                  console.error("An error occurred", err)
-                )
-              }
-            >
-              <View style={styles.eventContainer}>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>{link.titulo}</Text>
+            {adm && adm ? (
+              <TouchableOpacity
+                style={styles.iconContainerLeft}
+                onPress={() => navigation.navigate("createLinks")}
+              >
+                <Text style={styles.editar}>
+                  <NewIcon name="new" color="white" size="28" />
+                </Text>
+              </TouchableOpacity>
+            ) : null}
+          </View>
+          <ScrollView style={styles.scroll2}>
+            {data.links.map((link) => (
+              <TouchableOpacity
+                key={link._id}
+                onPress={() =>
+                  Linking.openURL("https://" + link.link).catch((err) =>
+                    console.error("An error occurred", err)
+                  )
+                }
+              >
+                <View style={styles.eventContainer}>
+                  <View style={styles.eventDetail}>
+                    <Text style={styles.titulo}>{link.titulo}</Text>
 
-                  <Text style={styles.text}>{link.descripcion}</Text>
-                  <Text style={styles.text}>{link.link}</Text>
+                    <Text style={styles.text}>{link.descripcion}</Text>
+                    <Text style={styles.text}>{link.link}</Text>
+                  </View>
+                  {borrar ? (
+                    <TouchableOpacity
+                      style={styles.borrar}
+                      onPress={async () => {
+                        await borrarLink({
+                          variables: { input: { _id: link._id } },
+                        });
+                        refetch();
+                      }}
+                    >
+                      <Text style={styles.x}>
+                        <BinIcon name="new" color="white" size="28" />
+                      </Text>
+                    </TouchableOpacity>
+                  ) : null}
                 </View>
-                {borrar ? (
-                  <TouchableOpacity
-                    style={styles.borrar}
-                    onPress={async () => {
-                      await borrarLink({
-                        variables: { input: { _id: link._id } },
-                      });
-                      refetch();
-                    }}
-                  >
-                    <Text style={styles.x}>
-                      <BinIcon name="new" color="white" size="28" />
-                    </Text>
-                  </TouchableOpacity>
-                ) : null}
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
       </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  total: {
+    width: "100%",
+    height: "100%",
+  },
+  view: {
+    display: "flex",
+    flexDirection: "row",
+    marginBottom: 10,
+    marginTop: 30,
+  },
+  header: {
+    height: 100,
+    width: "100%",
+  },
   container: {
     width: "96%",
     display: "flex",
     borderWidth: 1,
     borderColor: "#f5f2f2",
     borderRadius: 20,
-    marginTop: 100,
     marginLeft: "2%",
     marginRight: "2%",
     lineHeight: 800,
@@ -197,10 +218,10 @@ const styles = StyleSheet.create({
   },
   scroll2: {
     width: "96%",
-    height: 470,
+    height: "68%",
     marginLeft: "2%",
     marginRight: "2%",
-    marginBottom: 30,
+    marginBottom: 10,
     padding: 2,
   },
 
@@ -262,12 +283,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   title: {
-    fontFamily: "Roboto_400Regular",
+    fontFamily: "Roboto_500Medium",
     fontSize: 25,
-    marginTop: 20,
-    marginBottom: 0,
-    textAlign: "center",
-    color: "#7C88D5",
+    color: "grey",
   },
   buttonText: {
     marginLeft: 10,
@@ -281,13 +299,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginTop: 10,
   },
-  /* 
-  titulo: {
-    fontFamily: "Roboto_500Medium",
-    fontSize: 18,
-    marginBottom: 20,
-    marginTop: 30,
-    textAlign: "center",
-    color: "#7C88D5",
-  }, */
+
+  buttonSend: {
+    marginLeft: 20,
+  },
 });

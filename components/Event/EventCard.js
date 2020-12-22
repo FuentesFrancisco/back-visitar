@@ -19,6 +19,7 @@ import {
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
 import scroll from "../../styles/scroll";
+import Header from "../Header/Header";
 
 const image = {
   uri:
@@ -39,7 +40,7 @@ const QUERY = gql`
 
 export default function EventCard({ navigation }) {
   const { loading, data, error, refetch } = useQuery(QUERY);
-  useEffect(() => refetch(), []);
+
   var fecha;
 
   const [flag, setFlag] = useState(false);
@@ -55,49 +56,63 @@ export default function EventCard({ navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <ScrollView style={scroll}>
-        {/*<SearchBar navigation={navigation}/>*/}
-        {data.congresos.map((congreso) => (
-          <View key={congreso._id} style={styles.eventContainer}>
-            <View style={styles.eventDetail}>
-              <Text style={styles.titulo}>{congreso.titulo}</Text>
-              {/* ver que onda esto */}
-              <Text style={{ display: "none" }}>
-                {(fecha = congreso.fecha[0].split("T"))}
-              </Text>
-              <Text style={styles.text}>
-                {fecha[0]} {fecha[1].slice(0, 5).concat(" hs")}
-              </Text>
-              <Text style={styles.text}>{congreso.ubicacion} </Text>
+      <View style={styles.total}>
+        <Header></Header>
+        <Text style={styles.title}>Congresos</Text>
+        <ScrollView>
+          {/*<SearchBar navigation={navigation}/>*/}
+          {data.congresos.map((congreso) => (
+            <View key={congreso._id} style={styles.eventContainer}>
+              <View style={styles.eventDetail}>
+                <Text style={styles.titulo}>{congreso.titulo}</Text>
+                {/* ver que onda esto */}
+                <Text style={{ display: "none" }}>
+                  {(fecha = congreso.fecha[0].split("T"))}
+                </Text>
+                <Text style={styles.text}>
+                  {fecha[0]} {fecha[1].slice(0, 5).concat(" hs")}
+                </Text>
+                <Text style={styles.text}>{congreso.ubicacion} </Text>
 
-              <TouchableOpacity
-                style={styles.button}
-                onPress={() =>
-                  /*setFlag(!flag),*/
-                  navigation.navigate("Detail", { id: congreso._id })
-                }
-              >
-                <Text style={styles.buttonText}> + </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={() =>
+                    navigation.navigate("Detail", { id: congreso._id })
+                  }
+                >
+                  <Text style={styles.buttonText}> + </Text>
+                </TouchableOpacity>
 
-              {/* {flag ? (
+                {/* {flag ? (
                 <EventDetail key={congreso._id} id={congreso._id} />
               ) : null}*/}
+              </View>
+              <View style={styles.eventImg}>
+                <Image
+                  source={
+                    congreso.imagen ? { uri: `${congreso.imagen}` } : image
+                  }
+                  style={styles.image}
+                ></Image>
+              </View>
             </View>
-            <View style={styles.eventImg}>
-              <Image
-                source={ congreso.imagen ? { uri: `${congreso.imagen}` } : image }
-                style={styles.image}
-              ></Image>
-            </View>
-          </View>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  total: {
+    width: "100%",
+    height: "100%",
+  },
+  header: {
+    height: 100,
+    width: "100%",
+    backgroundColor: "green",
+  },
   buttonCrear: {
     flex: 1,
     backgroundColor: "#bdeeff",
@@ -105,6 +120,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 20,
   },
+
   buttonText1: {
     fontFamily: "Roboto_500Medium",
     fontSize: 15,
@@ -123,6 +139,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#f5f2f2",
     borderRadius: 20,
+    height: "90%",
+    width: "96%",
+    textAlign: "center",
+    marginLeft: "2%",
+    marginRight: "2%",
   },
   eventDetail: {
     flex: 3,
@@ -181,5 +202,13 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "#ffffff",
+  },
+  title: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 28,
+    marginTop: 20,
+    marginBottom: 10,
+    marginLeft: 20,
+    color: "grey",
   },
 });

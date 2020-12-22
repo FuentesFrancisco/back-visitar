@@ -19,6 +19,10 @@ import {
   Roboto_500Medium,
   Roboto_900Black,
 } from "@expo-google-fonts/roboto";
+import Header from "../../Header/Header";
+import BackIcon from "../../images/BackIcon";
+import BinIcon from "../../images/BinIcon";
+import NewIcon from "../../images/NewIcon";
 
 const QUERY = gql`
   query congresos {
@@ -62,58 +66,83 @@ export default function DeleteEvent({ navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <ScrollView style={styles.scroll}>
-        <Text style={styles.titulo2}> Eliminar/Editar Congreso </Text>
-        <TouchableOpacity
-          style={styles.buttonSend}
-          onPress={() => navigation.goBack()}
-        >
-          <Text style={styles.buttonText}>Volver</Text>
-        </TouchableOpacity>
-        {/*<SearchBar navigation={navigation}/>*/}
-        {data.congresos.map((congreso) => (
-          <View key={congreso._id} style={styles.container}>
-            <View /* style={styles.eventDetail} */>
-              <Text style={styles.titulo}>{congreso.titulo}</Text>
-            </View>
-            <View style={styles.buttonCont}>
-              <TouchableOpacity
-                style={styles.buttonSend}
-                onPress={async () => {
-                  await deleteEvent({
-                    variables: {
-                      input: {
-                        _id: congreso._id,
+      <View>
+        <Header></Header>
+        <View style={styles.view}>
+          <TouchableOpacity
+            style={styles.buttonSend}
+            onPress={() => navigation.goBack()}
+          >
+            <BackIcon color="grey" size="32" />
+          </TouchableOpacity>
+          <Text style={styles.title}> Eliminar/Editar Congreso </Text>
+        </View>
+        <ScrollView style={styles.scroll}>
+          {/*<SearchBar navigation={navigation}/>*/}
+          {data.congresos.map((congreso) => (
+            <View key={congreso._id} style={styles.container}>
+              <View /* style={styles.eventDetail} */>
+                <Text style={styles.titulo}>{congreso.titulo}</Text>
+              </View>
+              <View style={styles.buttonCont}>
+                <TouchableOpacity
+                  style={styles.buttonSend}
+                  onPress={async () => {
+                    await deleteEvent({
+                      variables: {
+                        input: {
+                          _id: congreso._id,
+                        },
                       },
-                    },
-                  })
-                    .then((ans) => alert("Congreso eliminado"))
-                    .catch((err) => alert(err));
-                  refetch();
-                }}
-              >
-                <Text style={styles.buttonText}> Eliminar </Text>
-              </TouchableOpacity>
+                    })
+                      .then((ans) => alert("Congreso eliminado"))
+                      .catch((err) => alert(err));
+                    refetch();
+                  }}
+                >
+                  <BinIcon
+                    name="new"
+                    color="grey"
+                    size="32"
+                    style={{
+                      marginLeft: 40,
+                    }}
+                  />
+                </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.buttonSend}
-                onPress={() => {
-                  navigation.navigate("EditEvent", { id: congreso._id });
-                }}
-              >
-                <Text style={styles.buttonText}> Editar </Text>
-              </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.buttonSend}
+                  onPress={() => {
+                    navigation.navigate("EditEvent", { id: congreso._id });
+                  }}
+                >
+                  <NewIcon
+                    name="new"
+                    color="grey"
+                    size="32"
+                    style={{
+                      marginLeft: 40,
+                    }}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        ))}
-      </ScrollView>
+          ))}
+        </ScrollView>
+      </View>
     );
   }
 }
 const styles = StyleSheet.create({
+  view: {
+    display: "flex",
+    flexDirection: "row",
+    marginLeft: 20,
+    marginTop: 20,
+  },
   scroll: {
     width: "96%",
-    height: 470,
+    height: "70%",
     marginLeft: "2%",
     marginRight: "2%",
     marginBottom: 30,
@@ -132,13 +161,13 @@ const styles = StyleSheet.create({
   },
   titulo: {
     fontFamily: "Roboto_400Regular",
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 10,
     color: "#454444",
   },
   titulo2: {
     fontFamily: "Roboto_400Regular",
-    fontSize: 18,
+    fontSize: 16,
     marginBottom: 20,
     marginTop: 30,
     textAlign: "center",
@@ -183,11 +212,15 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 15,
     borderRadius: 20,
-    marginLeft: 10,
-    marginRight: 10,
+    marginLeft: 5,
+    marginRight: 5,
     borderColor: "#f5f2f2",
     borderWidth: 1,
-    margin: 10,
+    margin: 5,
+  },
+  title: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 25,
+    color: "grey",
   },
 });
-
