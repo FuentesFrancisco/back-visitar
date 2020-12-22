@@ -79,13 +79,13 @@ export default function CreateEvent({ navigation }) {
     return <AppLoading />;
   } else {
     return (
-      <View>
+      <ScrollView style={styles.scroll}>
         <Text style={styles.titulo}> Crear congreso </Text>
         <TouchableOpacity
           style={styles.buttonSend}
           onPress={() => navigation.goBack()}
         >
-          <Text style={styles.buttonText}>Volver</Text>
+          <Text style={styles.texto}>Volver</Text>
         </TouchableOpacity>
         <Formik
           initialValues={{
@@ -124,6 +124,7 @@ export default function CreateEvent({ navigation }) {
           {({ handleChange, handleBlur, handleSubmit, values }) => (
             <View style={styles.container}>
               <View style={styles.inputGroup}>
+              <Text>Titulo</Text>
                 <TextInput
                   onChangeText={handleChange("titulo")}
                   onBlur={handleBlur("titulo")}
@@ -133,6 +134,7 @@ export default function CreateEvent({ navigation }) {
               </View>
 
               <View style={styles.inputGroup}>
+              <Text>Descripción</Text>
                 <TextInput
                   onChangeText={handleChange("descripcion")}
                   onBlur={handleBlur("descripcion")}
@@ -141,6 +143,7 @@ export default function CreateEvent({ navigation }) {
                 />
               </View>
               <View style={styles.inputGroup}>
+              <Text>Ubicación</Text>
                 <TextInput
                   onChangeText={handleChange("ubicacion")}
                   onBlur={handleBlur("ubicacion")}
@@ -149,6 +152,7 @@ export default function CreateEvent({ navigation }) {
                 />
               </View>
               <View style={styles.inputGroup}>
+              <Text>Especialidad</Text>
                 <TextInput
                   onChangeText={handleChange("especialidad")}
                   onBlur={handleBlur("especialidad")}
@@ -165,6 +169,7 @@ export default function CreateEvent({ navigation }) {
                 />
               </View> */}
               <View style={styles.inputGroup}>
+              <Text>Fechas</Text>
                 <TextInput
                   onChangeText={handleChange("fecha")}
                   onBlur={handleBlur("fecha")}
@@ -173,6 +178,7 @@ export default function CreateEvent({ navigation }) {
                 />
               </View>
               <View style={styles.inputGroup}>
+              <Text>Modalidad</Text>
                 <TextInput
                   onChangeText={handleChange("modalidad")}
                   onBlur={handleBlur("modalidad")}
@@ -189,13 +195,12 @@ export default function CreateEvent({ navigation }) {
                 />
               </View> */}
               <View>
-                <Button
-                  color="#7C88D5"
-                  borderRadius="20"
-                  padding="10"
-                  title="Agregar una foto"
+                <TouchableOpacity
                   onPress={cargarImagen}
-                />
+                  style={styles.buttonText1}
+                >
+                  <Text style={styles.texto}>Cargar Imagen</Text>
+                </TouchableOpacity>
 
                 {/*     <Button
                   title="Agregar una foto almacenada"
@@ -208,24 +213,25 @@ export default function CreateEvent({ navigation }) {
                   onPress={cargarImagen2}
                 /> */}
 
-                <Button
-                  color="#7C88D5"
-                  borderRadius="20"
-                  padding="10"
-                  title="Crear"
-                  /* disabled={isSubmitting} */
+                <TouchableOpacity
+                  style={styles.buttonText1}
                   onPress={(e) => handleSubmit(e)}
-                />
+                >
+                  <Text style={styles.texto}>Crear</Text>
+                </TouchableOpacity>
               </View>
             </View>
           )}
         </Formik>
-      </View>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
+  scroll:{
+    height:450,
+  },
   titulo: {
     fontFamily: "Roboto_500Medium",
     fontSize: 18,
@@ -235,32 +241,52 @@ const styles = StyleSheet.create({
     color: "#7C88D5",
   },
   container: {
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_400Regular",
     flex: 1,
     padding: 15,
     borderRadius: 20,
     marginLeft: 10,
     marginRight: 10,
+    height: 450,
   },
 
   inputGroup: {
-    flex: 1,
+    /*flex: 1,*/
     padding: 5,
+    /*marginLeft: 5,
+    marginRight: 5,*/
     marginBottom: 10,
-    marginLeft: 5,
-    marginRight: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#d9d9d9",
+    height: 60,
   },
-  buttonText: {
-    marginLeft: 10,
-    marginBottom: 15,
+  buttonText1: {
+    margin: 10,
+    padding: 10,
     fontFamily: "Roboto_500Medium",
     backgroundColor: "#7C88D5",
-    color: "white",
     padding: 5,
-    width: 80,
+    width: 200,
     textAlign: "center",
     borderRadius: 10,
+    height: 30,
+    textAlign: "center",
+  },
+  buttonSend: {
+    margin: 10,
+    padding: 10,
+    fontFamily: "Roboto_500Medium",
+    backgroundColor: "#7C88D5",
+    padding: 5,
+    width: 120,
+    textAlign: "center",
+    borderRadius: 10,
+    height: 30,
+    textAlign: "center",
+  },
+  texto: {
+    color: "white",
+    fontFamily: "Roboto_500Medium",
+    fontSize: 15,
   },
 });

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, StatusBar, View } from "react-native";
 import EventCard from "./components/Event/EventCard";
 import EventDetail from "./components/Event/EventDetail/EventDetail";
 import { AppRegistry, Button } from "react-native";
@@ -8,7 +8,7 @@ import CreateEvent from "./components/Event/EventCrud/CreateEvent";
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import UserList from "./components/Users/UsersList";
-import firebase from "firebase/app";
+import * as firebase from "firebase";
 import { UserProvider } from "./components/Users/userContext";
 import "firebase/auth";
 import State from "./components/Users/State";
@@ -43,8 +43,11 @@ var firebaseConfig = {
   appId: "1:960314269839:web:c9130a27fd6f5848ac50fa",
   measurementId: "G-8Y4DCJFJ5Z",
 };
-
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+   firebase.initializeApp(firebaseConfig);
+}else {
+   firebase.app(); // if already initialized, use that one
+}
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -72,6 +75,8 @@ function App() {
   }, [setUser]);
   /* console.log(user); */
   return (
+    <View style={{height: "100%", marginTop: StatusBar.currentHeight, width: "100%", display: "flex"
+    }}>
     <ApolloProvider client={client}>
       {user === null ? (
         <Login />
@@ -155,11 +160,6 @@ function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen
-              name="DeleteEvent"
-              component={DeleteEvent}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
               name="createLinks"
               component={createLinks}
               options={{ headerShown: false }}
@@ -183,6 +183,7 @@ function App() {
         </NavigationContainer>
       )}
     </ApolloProvider>
+    </View>
   );
 }
 

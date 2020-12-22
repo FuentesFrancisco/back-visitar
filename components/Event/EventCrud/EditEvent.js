@@ -97,7 +97,7 @@ export default function EditEvent({ navigation, route }) {
   } else {
     console.log("DATOS CONGRESO", data.congreso);
     return (
-      <View>
+      <View style={styles.container}>
         <Text style={styles.titulo}> Editar congreso </Text>
         <TouchableOpacity
           style={styles.buttonSend}
@@ -139,8 +139,9 @@ export default function EditEvent({ navigation, route }) {
         }} */
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
-            <View style={styles.container}>
+            <ScrollView style={styles.container}>
               <View style={styles.inputGroup}>
+              <Text>Titulo</Text>
                 <TextInput
                   onChangeText={handleChange("titulo")}
                   onBlur={handleBlur("titulo")}
@@ -150,6 +151,7 @@ export default function EditEvent({ navigation, route }) {
               </View>
 
               <View style={styles.inputGroup}>
+              <Text>Descripción</Text>
                 <TextInput
                   onChangeText={handleChange("descripcion")}
                   onBlur={handleBlur("descripcion")}
@@ -158,6 +160,7 @@ export default function EditEvent({ navigation, route }) {
                 />
               </View>
               <View style={styles.inputGroup}>
+              <Text>Ubicacion</Text>
                 <TextInput
                   onChangeText={handleChange("ubicacion")}
                   onBlur={handleBlur("ubicacion")}
@@ -166,6 +169,7 @@ export default function EditEvent({ navigation, route }) {
                 />
               </View>
               <View style={styles.inputGroup}>
+              <Text>Especialidad</Text>
                 <TextInput
                   onChangeText={handleChange("especialidad")}
                   onBlur={handleBlur("especialidad")}
@@ -184,6 +188,7 @@ export default function EditEvent({ navigation, route }) {
                 />
               </View> */}
               <View style={styles.inputGroup}>
+              <Text>Fechas</Text>
                 <TextInput
                   onChangeText={handleChange("fecha")}
                   onBlur={handleBlur("fecha")}
@@ -220,7 +225,7 @@ export default function EditEvent({ navigation, route }) {
                   onPress={(e) => handleSubmit(e)}
                 />
               </View>
-            </View>
+            </ScrollView>
           )}
         </Formik>
       </View>
@@ -243,6 +248,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: 10,
     marginRight: 10,
+    height:400,
   },
 
   inputGroup: {
@@ -253,6 +259,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
     borderBottomWidth: 1,
     borderBottomColor: "#d9d9d9",
+    height:50,
   },
   buttonText: {
     marginLeft: 10,
@@ -266,3 +273,4 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
+

@@ -5,7 +5,7 @@ import Bookmark from "../images/Bookmark";
 import ChatIcon from "../images/ChatIcon";
 import LinkIcon from "../images/LinkIcon";
 import EventCard from "../Event/EventCard";
-import Calendar from "../calendario";
+import Calendar from "../Calendario/index";
 
 import UnderConstruction from "../UnderConstruction";
 import Home from "../Home";

@@ -63,6 +63,12 @@ export default function InterestLinks({ navigation, route }) {
   } else {
     return (
       <View style={styles.container}>
+        <TouchableOpacity
+          style={styles.buttonSend}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>Volver</Text>
+        </TouchableOpacity>
         <View style={styles.bar}>
           {adm && adm ? (
             <TouchableOpacity
@@ -74,7 +80,9 @@ export default function InterestLinks({ navigation, route }) {
               </Text>
             </TouchableOpacity>
           ) : null}
-          <View style={styles.inputCont}>
+
+          <Text style={styles.title}> Links de interés </Text>
+          {/*           <View style={styles.inputCont}>
             <TextInput
               placeholder="Buscar..."
               style={{
@@ -102,14 +110,14 @@ export default function InterestLinks({ navigation, route }) {
                 size="22"
               />
             </TouchableOpacity>
-          </View>
+          </View> */}
           {adm && adm ? (
             <TouchableOpacity
               style={styles.iconContainerLeft}
               onPress={() => navigation.navigate("createLinks")}
             >
               <Text style={styles.editar}>
-                <NewIcon name="new" color="grey" size="28" />
+                <NewIcon name="new" color="white" size="28" />
               </Text>
             </TouchableOpacity>
           ) : null}
@@ -253,4 +261,33 @@ const styles = StyleSheet.create({
     color: "#7C88D5",
     justifyContent: "center",
   },
+  title: {
+    fontFamily: "Roboto_400Regular",
+    fontSize: 25,
+    marginTop: 20,
+    marginBottom: 0,
+    textAlign: "center",
+    color: "#7C88D5",
+  },
+  buttonText: {
+    marginLeft: 10,
+    marginBottom: 15,
+    fontFamily: "Roboto_500Medium",
+    backgroundColor: "#7C88D5",
+    color: "white",
+    padding: 5,
+    width: 80,
+    textAlign: "center",
+    borderRadius: 10,
+    marginTop: 10,
+  },
+  /* 
+  titulo: {
+    fontFamily: "Roboto_500Medium",
+    fontSize: 18,
+    marginBottom: 20,
+    marginTop: 30,
+    textAlign: "center",
+    color: "#7C88D5",
+  }, */
 });

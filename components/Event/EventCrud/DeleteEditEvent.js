@@ -17,6 +17,7 @@ import {
   Roboto_100Thin,
   Roboto_400Regular,
   Roboto_500Medium,
+  Roboto_900Black,
 } from "@expo-google-fonts/roboto";
 
 const QUERY = gql`
@@ -45,7 +46,7 @@ export default function DeleteEvent({ navigation }) {
 
   const [deleteEvent, {}] = useMutation(MUTATION);
 
-  useEffect(() => refetch(), []);
+  /*  useEffect(() => refetch(), []); */
   var fecha;
 
   const [flag, setFlag] = useState(false);
@@ -63,19 +64,19 @@ export default function DeleteEvent({ navigation }) {
     return (
       <ScrollView style={styles.scroll}>
         <Text style={styles.titulo2}> Eliminar/Editar Congreso </Text>
-        {/*   <TouchableOpacity
+        <TouchableOpacity
           style={styles.buttonSend}
-          onPress={() => navigation.navigate("AdminPanel")}
+          onPress={() => navigation.goBack()}
         >
           <Text style={styles.buttonText}>Volver</Text>
-        </TouchableOpacity> */}
+        </TouchableOpacity>
         {/*<SearchBar navigation={navigation}/>*/}
         {data.congresos.map((congreso) => (
           <View key={congreso._id} style={styles.container}>
             <View /* style={styles.eventDetail} */>
               <Text style={styles.titulo}>{congreso.titulo}</Text>
             </View>
-            <View>
+            <View style={styles.buttonCont}>
               <TouchableOpacity
                 style={styles.buttonSend}
                 onPress={async () => {
@@ -110,26 +111,33 @@ export default function DeleteEvent({ navigation }) {
   }
 }
 const styles = StyleSheet.create({
-  scroll,
+  scroll: {
+    width: "96%",
+    height: 470,
+    marginLeft: "2%",
+    marginRight: "2%",
+    marginBottom: 30,
+    padding: 17,
+  },
   buttonText1: {
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_400Regular",
     fontSize: 15,
     color: "#7C88D5",
   },
   titulo1: {
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_400Regular",
     fontSize: 18,
     marginBottom: 10,
     color: "#dedede",
   },
   titulo: {
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_400Regular",
     fontSize: 18,
     marginBottom: 10,
     color: "#454444",
   },
   titulo2: {
-    fontFamily: "Roboto_500Medium",
+    fontFamily: "Roboto_400Regular",
     fontSize: 18,
     marginBottom: 20,
     marginTop: 30,
@@ -144,6 +152,8 @@ const styles = StyleSheet.create({
   buttonCont: {
     textAlign: "center",
     width: "100%",
+    display: "flex",
+    flexDirection: "row",
   },
   button: {
     backgroundColor: "powderblue",
@@ -175,5 +185,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginLeft: 10,
     marginRight: 10,
+    borderColor: "#f5f2f2",
+    borderWidth: 1,
+    margin: 10,
   },
 });
+

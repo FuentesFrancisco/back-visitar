@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import SearchBar from "../SearchBar/searchBar";
+import SearchBar from "../SearchBar/searchBar.jsx";
 import BackIcon from "../images/BackIcon";
 import { Switch } from "react-native";
 
@@ -35,6 +35,7 @@ export default function UserPromote({ navigation }) {
         imagen
         _id
         rol
+        email
       }
     }
   `;
@@ -119,6 +120,7 @@ export default function UserPromote({ navigation }) {
               flex: 7,
               color: "#c4c4c4",
               paddingLeft: 20,
+              marginBottom: 50,
             }}
           />
         </View>
@@ -205,10 +207,13 @@ const styles = StyleSheet.create({
     marginRight: "2%",
     marginBottom: 30,
     padding: 17,
+    marginTop: 30,
   },
   iconContainer: {
     justifyContent: "center",
     flex: 1,
+    width:30,
+    height:30,
   },
   eventContainer: {
     flex: 1,

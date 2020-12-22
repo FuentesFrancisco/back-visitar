@@ -6,90 +6,91 @@ import {
   TouchableHighlight,
   Text,
   StyleSheet,
+  ScrollView
 } from "react-native";
 
 const UserPromote = styled.TouchableOpacity`
-  border-radius: 10;
+  border-radius: 12px;
   border-color: powderblue;
-  border-width: 0.7;
+  border-width: 1px;
   color: palevioletred;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
-  width: 95%;
   background-color: #7c88d5;
   margin: 10px;
+  width: 95%;
+  height: 40px;
 `;
 
 const EditCongresos = styled.TouchableOpacity`
-  background: transparent;
-  border-radius: 10;
-  background-color: #7c88d5;
+  border-radius: 12px;
   border-color: powderblue;
-  border-width: 0.7;
+  border-width: 1px;
   color: palevioletred;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
-  width: 35%;
+  background-color: #7c88d5;
   margin: 10px;
   width: 95%;
+  height: 40px;
 `;
 
 const CreateCongresos = styled.TouchableOpacity`
-  background: transparent;
-  border-radius: 10;
-  background-color: #7c88d5;
+  border-radius: 12px;
   border-color: powderblue;
-  border-width: 0.7;
+  border-width: 1px;
   color: palevioletred;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
-  width: 35%;
+  background-color: #7c88d5;
   margin: 10px;
   width: 95%;
+  height: 40px;
 `;
 
 const Answers = styled.TouchableOpacity`
-  border-radius: 10;
+  border-radius: 12px;
   border-color: powderblue;
-  border-width: 0.7;
+  border-width: 1px;
   color: palevioletred;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
-  width: 35%;
   background-color: #7c88d5;
-  width: 95%;
   margin: 10px;
+  width: 95%;
+  height: 40px;
 `;
 
 const CreateLinks = styled.TouchableOpacity`
-  border-radius: 10;
+  border-radius: 12px;
   border-color: powderblue;
-  border-width: 0.7;
+  border-width: 1px;
   color: palevioletred;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
-  width: 35%;
   background-color: #7c88d5;
   margin: 10px;
   width: 95%;
+  height: 40px;
 `;
 
 const DeleteLinks = styled.TouchableOpacity`
-  border-radius: 10;
+  border-radius: 12px;
   border-color: powderblue;
-  border-width: 0.7;
+  border-width: 1px;
   color: palevioletred;
-  padding: 10px;
+  padding: 5px;
   text-align: center;
-  width: 35%;
   background-color: #7c88d5;
   margin: 10px;
   width: 95%;
+  height: 40px;
 `;
 
 export default function AdminPanel({ navigation }) {
   return (
-    <View style={styles.container}>
+
+    <ScrollView style={styles.container}>
       <Text style={styles.titulo}> Panel de Administrador </Text>
       <UserPromote onPress={() => navigation.navigate("UserPromote")}>
         <Text style={styles.text}>Cambiar rol de usuarios</Text>
@@ -113,16 +114,17 @@ export default function AdminPanel({ navigation }) {
         <Text style={styles.text}>Eliminar/Editar Links</Text>
       </DeleteLinks>
 
-      <Answers /* onPress={() => navigation.navigate("UserPromote")} */>
+      {/* <Answers  onPress={() => navigation.navigate("UserPromote")} >
         <Text style={styles.text}>Respuestas</Text>
-      </Answers>
-    </View>
+      </Answers> */}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     width: "96%",
+    height: 450,
     display: "flex",
     borderWidth: 1,
     borderColor: "#f5f2f2",
@@ -133,15 +135,7 @@ const styles = StyleSheet.create({
     lineHeight: 800,
     textAlign: "center",
   },
-  inputCont: {
-    marginTop: 30,
-    marginLeft: "10%",
-    marginRight: "10%",
-    display: "flex",
-    flexDirection: "row",
-    flex: 1,
-    marginTop: 5,
-  },
+
   scroll2: {
     width: "96%",
     height: 470,
@@ -210,3 +204,4 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
 });
+

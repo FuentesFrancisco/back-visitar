@@ -59,7 +59,6 @@ export default function EventCard({ navigation }) {
         {/*<SearchBar navigation={navigation}/>*/}
         {data.congresos.map((congreso) => (
           <View key={congreso._id} style={styles.eventContainer}>
-            {console.log("CONGRESO", congreso)}
             <View style={styles.eventDetail}>
               <Text style={styles.titulo}>{congreso.titulo}</Text>
               {/* ver que onda esto */}
@@ -87,7 +86,7 @@ export default function EventCard({ navigation }) {
             </View>
             <View style={styles.eventImg}>
               <Image
-                source={congreso.imagen ? congreso.imagen : image}
+                source={ congreso.imagen ? { uri: `${congreso.imagen}` } : image }
                 style={styles.image}
               ></Image>
             </View>

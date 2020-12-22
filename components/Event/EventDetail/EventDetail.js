@@ -106,6 +106,7 @@ export default function EventDetail({ route, navigation }) {
   const { loading, data, error, refetch } = useQuery(QUERY, {
     variables: route.params,
   });
+  console.log('ROL', userDB.usuarios[0].rol !== 'Mod')
 
   let fecha;
   let fechaF;
@@ -130,7 +131,8 @@ export default function EventDetail({ route, navigation }) {
         <View style={styles.eventContainer}>
           <View style={styles.eventImg}>
             <Image
-              source={data.congreso.imagen ? data.congreso.imagen : image}
+              source={ data.congreso.imagen ? { uri: `${data.congreso.imagen}` } : image }
+              
               style={styles.image}
             ></Image>
           </View>
@@ -226,7 +228,7 @@ export default function EventDetail({ route, navigation }) {
                     <Text style={styles.text}>
                       {p.resupuesta ? p.resupuesta : "No hay respuesta"}
                     </Text>
-                    {p.resupuesta ? null : (
+                    { userDB.usuarios[0].rol === 'Mod' && !p.resupuesta ?  (
                       <TouchableOpacity
                         style={styles.buttonResp}
                         onPress={() => {
@@ -240,7 +242,7 @@ export default function EventDetail({ route, navigation }) {
                       >
                         <Text style={styles.buttonText}>Responder</Text>
                       </TouchableOpacity>
-                    )}
+                    ): null}
                   </View>
                 ))
               ) : (
@@ -363,7 +365,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#7C88D5",
     borderRadius: 10,
     padding: 5,
-    width: 70,
+    width: 200,
   },
   texto: {
     fontFamily: "Roboto_400Regular",
