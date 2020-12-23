@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { AppLoading } from "expo";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import BackIcon from "../../images/BackIcon";
-
 import {
   StyleSheet,
   Text,
@@ -10,8 +9,6 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  TextInput,
-  Modal,
 } from "react-native";
 import {
   useFonts,
@@ -33,27 +30,17 @@ export default function EventDetail({ route, navigation }) {
   const [insertar, setInsertar] = useState(false);
   const [answer, setAnswer] = useState(false);
   const { userDB } = useUser();
-  // console.log("usuario", user);
-  const [value, setValue] = useState({
-    pregunta: "",
-    congresoId: route.params.id,
-    resupuesta: "",
-    reaccion: 0,
-    usuarioId: userDB.usuarios[0]._id,
-  });
   const id = route.params.id;
   const [respuesta, setRespuesta] = useState({
     _id: "",
     pregunta: "",
     resupuesta: "",
   });
-  console.log(respuesta);
-  const [asiste, setAsiste] = useState({
+  const asiste = {
     congresoId: route.params.id,
     usuarioId: userDB.usuarios[0]._id,
-    // usuarioId: user.uid,
     asistire: true,
-  });
+  };
 
   const ASISTENCIA = gql`
     mutation asistencia($input: AsistenciaInput) {
@@ -66,7 +53,7 @@ export default function EventDetail({ route, navigation }) {
     }
   `;
 
-  const [addasistencia, {}] = useMutation(ASISTENCIA);
+  const [addasistencia] = useMutation(ASISTENCIA);
 
   const NOASIST = gql`
     mutation asistencia($input: AsistenciaInput) {
@@ -76,7 +63,7 @@ export default function EventDetail({ route, navigation }) {
       }
     }
   `;
-  const [deleteasistencia, {}] = useMutation(NOASIST);
+  const [deleteasistencia] = useMutation(NOASIST);
 
   const QUERY = gql`
     query congreso($id: JSON) {
@@ -102,12 +89,9 @@ export default function EventDetail({ route, navigation }) {
       }
     }
   `;
-
   const { loading, data, error, refetch } = useQuery(QUERY, {
     variables: route.params,
   });
-  console.log('ROL', userDB.usuarios[0].rol !== 'Mod')
-
   let fecha;
   let fechaF;
   let [fontsLoaded] = useFonts({
@@ -131,8 +115,11 @@ export default function EventDetail({ route, navigation }) {
         <View style={styles.eventContainer}>
           <View style={styles.eventImg}>
             <Image
-              source={ data.congreso.imagen ? { uri: `${data.congreso.imagen}` } : image }
-              
+              source={
+                data.congreso.imagen
+                  ? { uri: `${data.congreso.imagen}` }
+                  : image
+              }
               style={styles.image}
             ></Image>
           </View>
@@ -228,7 +215,7 @@ export default function EventDetail({ route, navigation }) {
                     <Text style={styles.text}>
                       {p.resupuesta ? p.resupuesta : "No hay respuesta"}
                     </Text>
-                    { userDB.usuarios[0].rol === 'Mod' && !p.resupuesta ?  (
+                    {userDB.usuarios[0].rol === "Mod" && !p.resupuesta ? (
                       <TouchableOpacity
                         style={styles.buttonResp}
                         onPress={() => {
@@ -242,7 +229,7 @@ export default function EventDetail({ route, navigation }) {
                       >
                         <Text style={styles.buttonText}>Responder</Text>
                       </TouchableOpacity>
-                    ): null}
+                    ) : null}
                   </View>
                 ))
               ) : (

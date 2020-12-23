@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import SearchBar from "../SearchBar/searchBar.jsx";
 import BackIcon from "../images/BackIcon";
-import { Switch } from "react-native";
-
+import Header from "../Header/Header";
 import {
   StyleSheet,
   Text,
@@ -12,19 +10,13 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  Button,
+  Switch,
 } from "react-native";
-import Header from "../Header/Header.js";
-
-// const useForceUpdate = () => useState()[1];
 
 export default function UserPromote({ navigation }) {
   const [search, setSearch] = useState("");
-  //   const forceUpdate = useForceUpdate();
 
   const bool = {};
-
-  var refresh = false;
 
   const QUERY = gql`
     query usuarios($where: JSON) {
@@ -69,27 +61,7 @@ export default function UserPromote({ navigation }) {
           rol: value,
         },
       },
-    })
-      .then((ans) => {})
-      .catch((err) => alert(err));
-  };
-
-  let users = data && data.usuarios;
-
-  //   mutation("Mod", "5fc8f54ace037c2030a884b5");
-
-  console.log(users);
-
-  useEffect(() => {}, [refresh]);
-
-  console.log(refresh);
-
-  const movement = () => {
-    if (users) {
-      data.usuarios.map((usuario) => {
-        const [move, setMove] = useState(false);
-      });
-    }
+    }).catch((err) => alert(err));
   };
 
   const handleValueChange = (id) => {
@@ -99,8 +71,6 @@ export default function UserPromote({ navigation }) {
 
   return (
     <>
-      {/* <Text>Admin Options</Text>
-        <br></br> */}
       <View>
         <Header></Header>
         <Text style={styles.title}>Rol de Usuarios</Text>
@@ -131,21 +101,7 @@ export default function UserPromote({ navigation }) {
           <ScrollView style={styles.scroll2}>
             {data && data.usuarios
               ? data.usuarios.map((usuario) => (
-                  /* setBool({ ...bool, [usuario._id]: false }), */
-                  <View
-                    key={usuario._id}
-
-                    /* onPress={() =>
-                    navigation.navigate("ChatDetail", {
-                      id: usuario._id,
-                      nombre: usuario.nombre,
-                      apellido: usuario.apellido,
-                      imagen: usuario.imagen,
-                      especialidad: usuario.especialidad,
-                      laboratorio: usuario.laboratorio,
-                    })
-                  } */
-                  >
+                  <View key={usuario._id}>
                     {(bool[usuario._id] = usuario.rol === "Mod")}
                     <View style={styles.eventContainer}>
                       <View style={styles.imgContainer}>

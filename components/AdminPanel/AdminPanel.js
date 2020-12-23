@@ -1,13 +1,6 @@
 import React from "react";
 import styled from "styled-components/native";
-import {
-  View,
-  TouchableOpacity,
-  TouchableHighlight,
-  Text,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import Header from "../Header/Header";
 
 const Boton = styled.TouchableOpacity`
@@ -25,7 +18,7 @@ const Boton = styled.TouchableOpacity`
 export default function AdminPanel({ navigation }) {
   return (
     <View>
-      <Header></Header>
+      <Header />
       <Text style={styles.titulo}> Administrador </Text>
       <View style={styles.container}>
         <Boton onPress={() => navigation.navigate("UserPromote")}>

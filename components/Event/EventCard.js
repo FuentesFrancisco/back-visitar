@@ -1,9 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { AppLoading } from "expo";
-import EventDetail from "./EventDetail/EventDetail";
-//import SearchBar from '../SearchBar/searchBar';
-
 import {
   StyleSheet,
   ScrollView,
@@ -18,7 +15,6 @@ import {
   Roboto_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
-import scroll from "../../styles/scroll";
 import Header from "../Header/Header";
 
 const image = {
@@ -26,7 +22,7 @@ const image = {
     "https://www.hqts.com/wp-content/uploads/2020/04/Pharmaceutical-Materials-no-logo-01-1110x550.jpg",
 };
 
-const QUERY = gql`
+export const QUERY = gql`
   query congresos {
     congresos(where: { publicado: true }) {
       _id
@@ -37,14 +33,10 @@ const QUERY = gql`
     }
   }
 `;
-
 export default function EventCard({ navigation }) {
   const { loading, data, error, refetch } = useQuery(QUERY);
-
+  useEffect(async () => await refetch(), []);
   var fecha;
-
-  const [flag, setFlag] = useState(false);
-
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
@@ -60,12 +52,10 @@ export default function EventCard({ navigation }) {
         <Header></Header>
         <Text style={styles.title}>Congresos</Text>
         <ScrollView>
-          {/*<SearchBar navigation={navigation}/>*/}
           {data.congresos.map((congreso) => (
             <View key={congreso._id} style={styles.eventContainer}>
               <View style={styles.eventDetail}>
                 <Text style={styles.titulo}>{congreso.titulo}</Text>
-                {/* ver que onda esto */}
                 <Text style={{ display: "none" }}>
                   {(fecha = congreso.fecha[0].split("T"))}
                 </Text>
@@ -73,7 +63,6 @@ export default function EventCard({ navigation }) {
                   {fecha[0]} {fecha[1].slice(0, 5).concat(" hs")}
                 </Text>
                 <Text style={styles.text}>{congreso.ubicacion} </Text>
-
                 <TouchableOpacity
                   style={styles.button}
                   onPress={() =>
@@ -82,10 +71,6 @@ export default function EventCard({ navigation }) {
                 >
                   <Text style={styles.buttonText}> + </Text>
                 </TouchableOpacity>
-
-                {/* {flag ? (
-                <EventDetail key={congreso._id} id={congreso._id} />
-              ) : null}*/}
               </View>
               <View style={styles.eventImg}>
                 <Image
@@ -148,7 +133,6 @@ const styles = StyleSheet.create({
   eventDetail: {
     flex: 3,
     flexWrap: "wrap",
-    /* backgroundColor: "blue",*/
     paddingTop: 15,
     paddingLeft: 10,
     borderTopLeftRadius: 20,
@@ -193,8 +177,6 @@ const styles = StyleSheet.create({
     width: 28,
     marginTop: 5,
     marginBottom: 25,
-    /*paddingLeft: 5,
-    paddingRight: 5,*/
     display: "flex",
     marginLeft: "40%",
     textAlign: "center",

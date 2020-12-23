@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { AppLoading } from "expo";
-import { gql, useQuery, useMutation } from "@apollo/client";
 import BackIcon from "../images/BackIcon";
-
 import {
   StyleSheet,
   Text,
@@ -24,7 +22,6 @@ import Header from "../Header/Header";
 let image = require("../images/bag.png");
 
 export default function ChatDetail({ route, navigation }) {
-  console.log(route.params);
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
@@ -154,7 +151,6 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     borderTopLeftRadius: 20,
     borderBottomLeftRadius: 20,
-    /*flexWrap: "wrap",*/
     paddingRight: 10,
     justifyContent: "center",
   },

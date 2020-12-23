@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
+/* import { Text, View, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import symbolicateStackTrace from "react-native/Libraries/Core/Devtools/symbolicateStackTrace";
 
@@ -232,3 +232,4 @@ const style = StyleSheet.create({
     borderRadius: 2,
   },
 });
+ */

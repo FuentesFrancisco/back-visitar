@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { gql, useQuery } from "@apollo/client";
 import { AppLoading } from "expo";
-
 import {
   StyleSheet,
   ScrollView,
@@ -16,12 +15,8 @@ import {
   Roboto_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
-import scroll from "../../styles/scroll";
 import BackIcon from "../images/BackIcon";
-import NewIcon from "../images/NewIcon";
-import BinIcon from "../images/BinIcon";
 import { TextInput } from "react-native-gesture-handler";
-import SearchIcon from "../images/SearchIcon";
 import Header from "../Header/Header";
 
 const QUERY = gql`
@@ -37,20 +32,9 @@ const QUERY = gql`
   }
 `;
 
-const image = {
-  uri:
-    "https://www.hqts.com/wp-content/uploads/2020/04/Pharmaceutical-Materials-no-logo-01-1110x550.jpg",
-};
-
 export default function UsersList({ navigation }) {
   const [search, setSearch] = useState("");
   let image = require("../images/bag.png");
-
-  const handleChange = (e) => {
-    console.log("e", e);
-    setSearch(e);
-  };
-
   const { loading, data, error, refetch } = useQuery(QUERY, {
     variables: {
       where: { rol: "User", nombre: { $regex: `.*${search}.*` } },
@@ -62,9 +46,8 @@ export default function UsersList({ navigation }) {
     Roboto_400Regular,
     Roboto_500Medium,
   });
+
   if (!fontsLoaded) {
-    return <AppLoading />;
-  } else if (loading) {
     return <AppLoading />;
   } else {
     return (
@@ -92,18 +75,6 @@ export default function UsersList({ navigation }) {
               paddingLeft: 20,
             }}
           />
-          {/*<TouchableOpacity onPress={() => alert("buscar")}>
-            <SearchIcon
-              name="search"
-              color="#c4c4c4"
-              style={{
-                flex: 1,
-                marginLeft: 5,
-                justifyContent: "center",
-              }}
-              size="22"
-            />
-            </TouchableOpacity>*/}
         </View>
         <View style={styles.container}>
           <ScrollView style={styles.scroll2}>
@@ -197,8 +168,6 @@ const styles = StyleSheet.create({
   eventDetail: {
     flex: 4,
     flexWrap: "wrap",
-    /* backgroundColor: "blue",*/
-
     paddingTop: 10,
     paddingLeft: 10,
     borderTopLeftRadius: 20,

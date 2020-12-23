@@ -1,13 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   Text,
   View,
   TextInput,
   StyleSheet,
   TouchableOpacity,
-  Button,
 } from "react-native";
-import { Formik, Form } from "formik";
+import { Formik } from "formik";
 import {
   useFonts,
   Roboto_100Thin,
@@ -31,7 +30,6 @@ const MUTATION = gql`
 
 export default function createLinks({ navigation }) {
   const [createLink, { loading, data, error, refetch }] = useMutation(MUTATION);
-
   let mutation = (values) => {
     console.log(values);
     createLink({

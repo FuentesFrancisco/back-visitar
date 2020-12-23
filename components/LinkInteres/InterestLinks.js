@@ -7,7 +7,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  requireNativeComponent,
 } from "react-native";
 import {
   useFonts,
@@ -17,8 +16,6 @@ import {
 } from "@expo-google-fonts/roboto";
 import NewIcon from "../images/NewIcon";
 import BinIcon from "../images/BinIcon";
-import { TextInput } from "react-native-gesture-handler";
-import SearchIcon from "../images/SearchIcon";
 import * as Linking from "expo-linking";
 import Header from "../Header/Header";
 import BackIcon from "../images/BackIcon";
@@ -47,12 +44,10 @@ export default function InterestLinks({ navigation, route }) {
   const [borrarLink, {}] = useMutation(MUTATION);
 
   const [borrar, setBorrar] = useState(false);
-  console.log("ROUTE", route);
   let adm;
   if (route.params) {
     adm = route.params.admin;
   }
-  console.log("route adm", adm);
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
@@ -87,36 +82,6 @@ export default function InterestLinks({ navigation, route }) {
                 </Text>
               </TouchableOpacity>
             ) : null}
-
-            {/*           <View style={styles.inputCont}>
-            <TextInput
-              placeholder="Buscar..."
-              style={{
-                height: 35,
-                borderColor: "#c4c4c4",
-                borderRadius: 20,
-                borderWidth: 1,
-                flex: 7,
-                marginTop: 8,
-                marginBottom: 15,
-                color: "#c4c4c4",
-                paddingLeft: 20,
-              }}
-            ></TextInput>
-            <TouchableOpacity onPress={() => alert("buscar")}>
-              <SearchIcon
-                name="search"
-                color="#c4c4c4"
-                style={{
-                  flex: 1,
-                  marginTop: 10,
-                  marginLeft: 3,
-                  justifyContent: "center",
-                }}
-                size="22"
-              />
-            </TouchableOpacity>
-          </View> */}
             {adm && adm ? (
               <TouchableOpacity
                 style={styles.iconContainerLeft}

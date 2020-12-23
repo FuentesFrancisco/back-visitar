@@ -230,8 +230,8 @@ function Login(props) {
             onPress={() => setTask("Registrarse")}
             title={"Registrarse"}
           />
-          <View style={styles.margen}>
-            <Text>Email</Text>
+          <ScrollView style={styles.margen}>
+            <Text style={styles.text}>Email</Text>
             <TextInput
               style={styles.inputGroup}
               name="emailRegister"
@@ -246,7 +246,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text>Password</Text>
+            <Text style={styles.text}>Password</Text>
             <TextInput
               style={styles.inputGroup}
               name="passwordRegister"
@@ -261,7 +261,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text>Nombre</Text>
+            <Text style={styles.text}>Nombre</Text>
             <TextInput
               style={styles.inputGroup}
               name="nombre"
@@ -275,7 +275,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text>Apellido</Text>
+            <Text style={styles.text}>Apellido</Text>
             <TextInput
               style={styles.inputGroup}
               name="apellido"
@@ -288,7 +288,7 @@ function Login(props) {
               name="apellido"
               component={Text}
             />
-            <Text>Teléfono</Text>
+            <Text style={styles.text}>Teléfono</Text>
             <TextInput
               style={styles.inputGroup}
               name="telefono"
@@ -304,7 +304,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text>Provincia</Text>
+            <Text style={styles.text}>Provincia</Text>
             <TextInput
               style={styles.inputGroup}
               name="provincia"
@@ -318,7 +318,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text>Matrícula</Text>
+            <Text style={styles.text}>Matrícula</Text>
             <TextInput
               style={styles.inputGroup}
               name="matricula"
@@ -332,7 +332,7 @@ function Login(props) {
               name="matricula"
               component={Text}
             />
-            <Text>Laboratorio</Text>
+            <Text style={styles.text}>Laboratorio</Text>
             <TextInput
               style={styles.inputGroup}
               name="laboratorio"
@@ -346,7 +346,7 @@ function Login(props) {
               component={Text}
             />
 
-            <Text>Especialidad</Text>
+            <Text style={styles.text}>Especialidad</Text>
             <TextInput
               style={styles.inputGroup}
               name="especialidad"
@@ -359,7 +359,7 @@ function Login(props) {
               name="especialidad"
               component={Text}
             />
-          </View>
+          </ScrollView>
           <Button
             color="#7C88D5"
             borderRadius="20"

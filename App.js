@@ -11,9 +11,7 @@ import UserList from "./components/Users/UsersList";
 import firebase from "firebase/app";
 import { UserProvider } from "./components/Users/userContext";
 import "firebase/auth";
-import State from "./components/Users/State";
 import useUser from "./components/Users/useUser";
-import App2 from "./App2";
 import MyTabs from "./components/MenuBar/TabBar";
 import UnderConstruction from "./components/UnderConstruction";
 import HeaderTab from "./components/Header/HeaderTab";
@@ -25,13 +23,11 @@ import ChatDetail from "./components/Chat/ChatDetail";
 import UsersList from "./components/Chat/UsersList";
 import DeleteEditEvent from "./components/Event/EventCrud/DeleteEditEvent";
 import UserPromote from "./components/AdminPanel/UserPromote";
-/* import DeleteEvent from "./components/Event/EventCrud/DeleteEvent"; */
 import createLinks from "./components/LinkInteres/CrudLink";
 import InterestLinks from "./components/LinkInteres/InterestLinks";
 import AgregarTarea from "./components/Calendario/AgregarTarea";
 import FechaSeleccionada from "./components/Calendario/FechaSeleccionada";
 import EditEvent from "./components/Event/EventCrud/EditEvent";
-import AdminPanel from "./components/AdminPanel/AdminPanel";
 
 const Stack = createStackNavigator();
 
@@ -45,7 +41,11 @@ var firebaseConfig = {
   measurementId: "G-8Y4DCJFJ5Z",
 };
 
-firebase.initializeApp(firebaseConfig);
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app(); // if already initialized, use that one
+}
 
 // Initialize Apollo Client
 const client = new ApolloClient({
@@ -73,123 +73,121 @@ function App() {
   }, [setUser]);
   /* console.log(user); */
   return (
-    <ApolloProvider client={client}>
-      {user === null ? (
-        <Login />
-      ) : (
-        <NavigationContainer theme={MyTheme}>
-          <Button
-            color="#7C88D5"
-            onPress={() => firebase.auth().signOut()}
-            title="Cerrar sesión"
-          />
-          <Stack.Navigator
-            initialRouteName="Tab"
-            screenOptions={{
-              cardStyle: { backgroundColor: "#fff" },
-            }}
-          >
-            <Stack.Screen
-              name="CreateEvent"
-              component={CreateEvent}
-              options={{ headerShown: false }}
+    <View
+      style={{
+        height: "100%",
+        marginTop: StatusBar.currentHeight,
+        width: "100%",
+        display: "flex",
+      }}
+    >
+      <ApolloProvider client={client}>
+        {user === null ? (
+          <Login />
+        ) : (
+          <NavigationContainer theme={MyTheme}>
+            <Button
+              color="#7C88D5"
+              onPress={() => firebase.auth().signOut()}
+              title="Cerrar sesión"
             />
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Top"
-              component={HeaderTab}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Calendar"
-              component={Calendario}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Chat"
-              component={ChatCard}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="UsersList"
-              component={UsersList}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="ChatDetail"
-              component={ChatDetail}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Tab"
-              component={MyTabs}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Event"
-              component={EventCard}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="Detail"
-              component={EventDetail}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="DeleteEditEvent"
-              component={DeleteEditEvent}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="UserPromote"
-              component={UserPromote}
-              options={{ headerShown: false }}
-            />
+            <Stack.Navigator
+              initialRouteName="Tab"
+              screenOptions={{
+                cardStyle: { backgroundColor: "#fff" },
+              }}
+            >
+              <Stack.Screen
+                name="CreateEvent"
+                component={CreateEvent}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Top"
+                component={HeaderTab}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Calendar"
+                component={Calendario}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Chat"
+                component={ChatCard}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="UsersList"
+                component={UsersList}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="ChatDetail"
+                component={ChatDetail}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Tab"
+                component={MyTabs}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Event"
+                component={EventCard}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="Detail"
+                component={EventDetail}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="DeleteEditEvent"
+                component={DeleteEditEvent}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="UserPromote"
+                component={UserPromote}
+                options={{ headerShown: false }}
+              />
 
-            <Stack.Screen
-              name="AgregarTarea"
-              component={AgregarTarea}
-              options={{ headerShown: false }}
-            />
-
-            {/*      <Stack.Screen
-              name="DeleteEvent"
-              component={DeleteEvent}
-              options={{ headerShown: false }}
-            /> */}
-            <Stack.Screen
-              name="createLinks"
-              component={createLinks}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="InterestLinks"
-              component={InterestLinks}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="EditEvent"
-              component={EditEvent}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="FechaSeleccionada"
-              component={FechaSeleccionada}
-              options={{ headerShown: false }}
-            />
-            <Stack.Screen
-              name="AdminPanel"
-              component={AdminPanel}
-              options={{ headerShown: false }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
-      )}
-    </ApolloProvider>
+              <Stack.Screen
+                name="AgregarTarea"
+                component={AgregarTarea}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="createLinks"
+                component={createLinks}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="InterestLinks"
+                component={InterestLinks}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="EditEvent"
+                component={EditEvent}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name="FechaSeleccionada"
+                component={FechaSeleccionada}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        )}
+      </ApolloProvider>
+    </View>
   );
 }
 

@@ -1,15 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { gql, useQuery, useMutation } from "@apollo/client";
 import { AppLoading } from "expo";
-
-//import SearchBar from '../SearchBar/searchBar';
-import scroll from "../../../styles/scroll";
 import {
   StyleSheet,
   ScrollView,
   Text,
   View,
-  Image,
   TouchableOpacity,
 } from "react-native";
 import {
@@ -17,7 +13,6 @@ import {
   Roboto_100Thin,
   Roboto_400Regular,
   Roboto_500Medium,
-  Roboto_900Black,
 } from "@expo-google-fonts/roboto";
 import Header from "../../Header/Header";
 import BackIcon from "../../images/BackIcon";
@@ -48,12 +43,7 @@ const MUTATION = gql`
 export default function DeleteEvent({ navigation }) {
   const { loading, data, error, refetch } = useQuery(QUERY);
 
-  const [deleteEvent, {}] = useMutation(MUTATION);
-
-  /*  useEffect(() => refetch(), []); */
-  var fecha;
-
-  const [flag, setFlag] = useState(false);
+  const [deleteEvent] = useMutation(MUTATION);
 
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
@@ -78,10 +68,9 @@ export default function DeleteEvent({ navigation }) {
           <Text style={styles.title}> Eliminar/Editar Congreso </Text>
         </View>
         <ScrollView style={styles.scroll}>
-          {/*<SearchBar navigation={navigation}/>*/}
           {data.congresos.map((congreso) => (
             <View key={congreso._id} style={styles.container}>
-              <View /* style={styles.eventDetail} */>
+              <View>
                 <Text style={styles.titulo}>{congreso.titulo}</Text>
               </View>
               <View style={styles.buttonCont}>

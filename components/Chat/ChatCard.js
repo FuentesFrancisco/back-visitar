@@ -1,8 +1,6 @@
 import React from "react";
 import { AppLoading } from "expo";
 import useUser from "../Users/useUser";
-//import SearchBar from '../SearchBar/searchBar';
-
 import {
   StyleSheet,
   ScrollView,
@@ -17,7 +15,6 @@ import {
   Roboto_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
-import BackIcon from "../images/BackIcon";
 import NewIcon from "../images/NewIcon";
 import BinIcon from "../images/BinIcon";
 import { TextInput } from "react-native-gesture-handler";
@@ -30,14 +27,14 @@ const image = {
 };
 
 export default function ChatCard({ navigation }) {
-  const { user, setUser } = useUser();
-  console.log(user);
+  const { user } = useUser();
 
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
     Roboto_500Medium,
   });
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else {
@@ -270,7 +267,6 @@ const styles = StyleSheet.create({
   eventDetail: {
     flex: 4,
     flexWrap: "wrap",
-    /* backgroundColor: "blue",*/
     paddingTop: 15,
     paddingLeft: 10,
     borderTopLeftRadius: 20,

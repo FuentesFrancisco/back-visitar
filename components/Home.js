@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { AppLoading } from "expo";
 import useUser from "../components/Users/useUser";
 import { gql, useQuery, useMutation } from "@apollo/client";
-import styled from "styled-components/native";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import { StyleSheet, Text, View, ImageBackground } from "react-native";
@@ -14,7 +13,6 @@ import {
 } from "@expo-google-fonts/roboto";
 import Header from "./Header/Header";
 import { Image } from "react-native";
-
 const image = {
   main_logo: require("./images/visitar.png"),
   doc: require("./images/doc1.png"),
@@ -35,6 +33,7 @@ const QUERY = gql`
       verificado
       imagen
       especialidad
+      expoToken
     }
   }
 `;
@@ -125,9 +124,6 @@ export default function Home() {
 
 const styles = StyleSheet.create({
   Cont: {
-    /*width: 350,*/
-    /*height: 400,*/
-    /* marginTop: 100,*/
     marginLeft: 10,
     marginRight: 10,
     marginBottom: 30,
@@ -147,15 +143,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     resizeMode: "cover",
   },
-  /*   imgCont: {
-    width: 200,
-    height: 100,
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: 20,
-    display: "flex",
-    flexDirection: "row",
-  }, */
   image: {
     flex: 1,
     resizeMode: "contain",

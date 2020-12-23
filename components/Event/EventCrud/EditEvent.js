@@ -1,7 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   View,
-  Button,
   TextInput,
   ScrollView,
   StyleSheet,
@@ -10,8 +9,7 @@ import {
 } from "react-native";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { AppLoading } from "expo";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { buildExecutionContext } from "graphql/execution/execute";
+import { Formik } from "formik";
 import {
   useFonts,
   Roboto_100Thin,
@@ -43,7 +41,7 @@ const QUERY = gql`
   }
 `;
 export default function EditEvent({ navigation, route }) {
-  const [editCongreso, {}] = useMutation(MUTATION);
+  const [editCongreso] = useMutation(MUTATION);
 
   const { loading, data, error, refetch } = useQuery(QUERY, {
     variables: route.params,
@@ -51,9 +49,6 @@ export default function EditEvent({ navigation, route }) {
 
   let cargaImagen;
   let mutation = (values) => {
-    console.log("VALUES", values);
-    console.log("IMAGEN", cargaImagen);
-    console.log("PARAMS", route.params.id);
     editCongreso({
       variables: {
         input: {
@@ -67,9 +62,8 @@ export default function EditEvent({ navigation, route }) {
           publicado: true,
         },
       },
-      /* modalidad: values.modalidad, */
     })
-      .then((ans) => {
+      .then(() => {
         alert("Cambios realizados");
       })
       .then(() => navigation.goBack())
@@ -82,11 +76,6 @@ export default function EditEvent({ navigation, route }) {
     });
   }
 
-  function cargarImagen2() {
-    setImagen(takeImagen());
-    console.log(imagen);
-  }
-
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
@@ -97,7 +86,6 @@ export default function EditEvent({ navigation, route }) {
   } else if (loading) {
     return <AppLoading />;
   } else {
-    console.log("DATOS CONGRESO", data.congreso);
     return (
       <View>
         <Header></Header>
@@ -114,32 +102,9 @@ export default function EditEvent({ navigation, route }) {
               descripcion: data.congreso.descripcion,
               ubicacion: data.congreso.ubicacion,
               especialidad: data.congreso.especialidad[0],
-              /*    modalidad: "", */
               fecha: data.congreso.fecha[0],
             }}
             onSubmit={(values) => mutation(values)}
-            /* validate={(values) => {
-          const errors = {};
-
-          if (!values.titulo) {
-            errors.titulo = "Titulo es requerido!";
-          } else if (values.titulo.length <= 1) {
-            errors.titulo = "Titulo demasiado corto";
-          }
-          if (!values.descripcion) {
-            errors.descripcion = "Descripción es requerido";
-          }
-          if (!values.ubicacion) {
-            errors.ubicacion = "Es necesaria una ubicación";
-          }
-          if (!values.especialidad) {
-            errors.especialidad = "Es necesario ingresar una especialidad";
-          }
-          if (!values.modalidad) {
-            errors.modalidad = "Ingrese modalidad";
-          }
-          return errors;
-        }} */
           >
             {({ handleChange, handleBlur, handleSubmit, values }) => (
               <ScrollView style={styles.scroll}>
@@ -184,16 +149,6 @@ export default function EditEvent({ navigation, route }) {
                     placeholder="Especialidad"
                   />
                 </View>
-                {/*       <View style={styles.inputGroup}>
-                <TextInput
-                  onChangeText={handleChange("imagen")}
-                  onBlur={handleBlur("imagen")}
-                  value={
-                    data.congreso.imagen[0] ? data.congreso.imagen[0] : null
-                  }
-                  placeholder="Imagen"
-                />
-              </View> */}
                 <View style={styles.inputGroup}>
                   <Text>Fechas</Text>
                   <TextInput
@@ -204,14 +159,6 @@ export default function EditEvent({ navigation, route }) {
                     placeholder="Fechas"
                   />
                 </View>
-                {/*     <View style={styles.inputGroup}>
-                <TextInput
-                  onChangeText={handleChange("modalidad")}
-                  onBlur={handleBlur("modalidad")}
-                  value={values.modalidad}
-                  placeholder="modalidad"
-                />
-              </View> */}
                 <View style={styles.buttonCont}>
                   <TouchableOpacity
                     onPress={cargarImagen}
@@ -219,27 +166,6 @@ export default function EditEvent({ navigation, route }) {
                   >
                     <Text style={styles.texto}>Cambiar foto</Text>
                   </TouchableOpacity>
-
-                  {/*</View> <View>
-                  <Button
-                    color="#7C88D5"
-                    borderRadius="20"
-                    title="Cambiar foto"
-                    onPress={cargarImagen}
-               />*/}
-                  {/*   <Button
-                  color="#7C88D5"
-                  borderRadius="20"
-                  title="Agregar una foto con tu cámara"
-                  onPress={cargarImagen2}
-                /> */}
-                  {/*} <Button
-                    color="#7C88D5"
-                    borderRadius="20"
-                    title="Confirmar cambios"
-                   
-                    {/*onPress={(e) => handleSubmit(e)}
-              />*/}
                   <TouchableOpacity
                     style={styles.buttonText1}
                     onPress={(e) => handleSubmit(e)}
@@ -282,21 +208,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#7C88D5",
   },
-  /*container: {
-    fontFamily: "Roboto_500Medium",
-    flex: 1,
-    padding: 15,
-    borderRadius: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    height: "70%",
-  },
-*/
   inputGroup: {
-    /*flex: 1,*/
     padding: 5,
-    /*marginLeft: 5,
-    marginRight: 5,*/
     marginBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#d9d9d9",

@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Picker } from "@react-native-picker/picker";
+import { Calendar } from "react-native-calendars";
 import {
   View,
   Button,
@@ -10,15 +12,15 @@ import {
 } from "react-native";
 import { gql, useMutation } from "@apollo/client";
 import { AppLoading } from "expo";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { buildExecutionContext } from "graphql/execution/execute";
+import { Formik } from "formik";
 import {
   useFonts,
   Roboto_100Thin,
   Roboto_400Regular,
   Roboto_500Medium,
 } from "@expo-google-fonts/roboto";
-import { getImagen, takeImagen } from "../../pickImage/pick";
+import { getImagen } from "../../pickImage/pick";
+import { QUERY } from "../EventCard";
 import BackIcon from "../../images/BackIcon";
 import Header from "../../Header/Header";
 
@@ -33,24 +35,27 @@ export default function CreateEvent({ navigation }) {
   const [createCongreso, { loading, data, error, refetch }] = useMutation(
     MUTATION
   );
+  const [state, setState] = useState({
+    fecha: [],
+    render: {},
+  });
 
   let cargaImagen;
   let mutation = (values) => {
-    console.log("values", values);
     createCongreso({
       variables: {
         input: {
           titulo: values.titulo,
           descripcion: values.descripcion,
           ubicacion: values.ubicacion,
-          fecha: [values.fecha],
+          fecha: state.fecha,
           especialidad: [values.especialidad],
           imagen: cargaImagen,
           publicado: true,
           modalidad: values.modalidad,
         },
+        refetchQueries: [{ query: QUERY }],
       },
-      /* modalidad: values.modalidad, */
     })
       .then((ans) => {
         alert("Congreso creado");
@@ -64,170 +69,129 @@ export default function CreateEvent({ navigation }) {
     });
   }
 
-  function cargarImagen2() {
-    setImagen(takeImagen());
-    console.log(imagen);
-  }
-
-  /*   console.log(errors); */
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
     Roboto_500Medium,
   });
+
   if (!fontsLoaded) {
     return <AppLoading />;
   } else if (loading) {
     return <AppLoading />;
   } else {
     return (
-      <View>
-        <Header></Header>
-        <View style={styles.view}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <BackIcon color="grey" size="32" />
-          </TouchableOpacity>
-          <Text style={styles.title}> Crear congreso </Text>
-        </View>
-        <ScrollView style={styles.scroll}>
-          <Formik
-            initialValues={{
-              titulo: "",
-              descripcion: "",
-              ubicacion: "",
-              especialidad: [""],
-              imagen: [""],
-              fecha: "",
-              modalidad: "",
-            }}
-            onSubmit={(values) => mutation(values)}
-            /* validate={(values) => {
-          const errors = {};
+      <ScrollView style={styles.scroll}>
+        <Text style={styles.titulo}> Crear congreso </Text>
+        <TouchableOpacity
+          style={styles.buttonSend}
+          onPress={() => navigation.goBack()}
+        >
+          <Text style={styles.buttonText}>Volver</Text>
+        </TouchableOpacity>
 
-          if (!values.titulo) {
-            errors.titulo = "Titulo es requerido!";
-          } else if (values.titulo.length <= 1) {
-            errors.titulo = "Titulo demasiado corto";
-          }
-          if (!values.descripcion) {
-            errors.descripcion = "Descripción es requerido";
-          }
-          if (!values.ubicacion) {
-            errors.ubicacion = "Es necesaria una ubicación";
-          }
-          if (!values.especialidad) {
-            errors.especialidad = "Es necesario ingresar una especialidad";
-          }
-          if (!values.modalidad) {
-            errors.modalidad = "Ingrese modalidad";
-          }
-          return errors;
-        }} */
-          >
-            {({ handleChange, handleBlur, handleSubmit, values }) => (
-              <View style={styles.container}>
-                <View style={styles.inputGroup}>
-                  <Text>Titulo</Text>
-                  <TextInput
-                    onChangeText={handleChange("titulo")}
-                    onBlur={handleBlur("titulo")}
-                    value={values.titulo}
-                    placeholder="Título"
-                  />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <Text>Descripción</Text>
-                  <TextInput
-                    onChangeText={handleChange("descripcion")}
-                    onBlur={handleBlur("descripcion")}
-                    value={values.descripcion}
-                    placeholder="Descripción"
-                  />
-                </View>
-                <View style={styles.inputGroup}>
-                  <Text>Ubicación</Text>
-                  <TextInput
-                    onChangeText={handleChange("ubicacion")}
-                    onBlur={handleBlur("ubicacion")}
-                    value={values.ubicacion}
-                    placeholder="Ubicación"
-                  />
-                </View>
-                <View style={styles.inputGroup}>
-                  <Text>Especialidad</Text>
-                  <TextInput
-                    onChangeText={handleChange("especialidad")}
-                    onBlur={handleBlur("especialidad")}
-                    value={values.especialidad}
-                    placeholder="Especialidad"
-                  />
-                </View>
-                {/*           <View style={styles.inputGroup}>
+        <Formik
+          initialValues={{
+            titulo: "",
+            descripcion: "",
+            ubicacion: "",
+            especialidad: [""],
+            imagen: [""],
+            fecha: "",
+            modalidad: "",
+          }}
+          onSubmit={(values) => mutation(values)}
+        >
+          {({ handleChange, handleBlur, handleSubmit, values }) => (
+            <View style={styles.container}>
+              <View style={styles.inputGroup}>
                 <TextInput
-                  onChangeText={handleChange("imagen")}
-                  onBlur={handleBlur("imagen")}
-                  value={values.imagen}
-                  placeholder="Imagen"
+                  onChangeText={handleChange("titulo")}
+                  onBlur={handleBlur("titulo")}
+                  value={values.titulo}
+                  placeholder="Título"
                 />
-              </View> */}
-                <View style={styles.inputGroup}>
-                  <Text>Fechas</Text>
-                  <TextInput
-                    onChangeText={handleChange("fecha")}
-                    onBlur={handleBlur("fecha")}
-                    value={values.fecha}
-                    placeholder="Fechas"
-                  />
-                </View>
-                <View style={styles.inputGroup}>
-                  <Text>Modalidad</Text>
-                  <TextInput
-                    onChangeText={handleChange("modalidad")}
-                    onBlur={handleBlur("modalidad")}
-                    value={values.modalidad}
-                    placeholder="Modalidad"
-                  />
-                </View>
-                {/*     <View style={styles.inputGroup}>
-                <TextInput
-                  onChangeText={handleChange("modalidad")}
-                  onBlur={handleBlur("modalidad")}
-                  value={values.modalidad}
-                  placeholder="modalidad"
-                />
-              </View> */}
-                <View style={styles.buttonCont}>
-                  <TouchableOpacity
-                    onPress={cargarImagen}
-                    style={styles.buttonText1}
-                  >
-                    <Text style={styles.texto}>Cargar Imagen</Text>
-                  </TouchableOpacity>
+              </View>
 
-                  {/*     <Button
-                  title="Agregar una foto almacenada"
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("descripcion")}
+                  onBlur={handleBlur("descripcion")}
+                  value={values.descripcion}
+                  placeholder="Descripción"
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("ubicacion")}
+                  onBlur={handleBlur("ubicacion")}
+                  value={values.ubicacion}
+                  placeholder="Ubicación"
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <TextInput
+                  onChangeText={handleChange("especialidad")}
+                  onBlur={handleBlur("especialidad")}
+                  value={values.especialidad}
+                  placeholder="Especialidad"
+                />
+              </View>
+              <View style={styles.inputGroup2}>
+                <Calendar
+                  style={{ width: "100%" }}
+                  placeholder="Fechas"
+                  markingType={"period"}
+                  onDayPress={(e) =>
+                    setState({
+                      ...state,
+                      fecha: state.fecha.includes(e.dateString)
+                        ? state.fecha.filter((dia) => dia !== e.dateString)
+                        : [...state.fecha, e.dateString],
+                      render: !!state.render[e.dateString]
+                        ? {
+                            ...state.render,
+                            [e.dateString]: "",
+                          }
+                        : {
+                            ...state.render,
+                            [e.dateString]: { color: "lightblue" },
+                          },
+                    })
+                  }
+                  markedDates={state.render}
+                />
+              </View>
+              <View style={styles.inputGroup}>
+                <Picker
+                  selectedValue={values.modalidad}
+                  style={{ height: 50, width: 100 }}
+                  onValueChange={handleChange("modalidad")}
+                >
+                  <Picker.Item label="Presencial" value="presencial" />
+                  <Picker.Item label="Virtual" value="virtual" />
+                </Picker>
+              </View>
+              <View>
+                <Button
+                  color="#7C88D5"
+                  borderRadius="20"
+                  padding="10"
+                  title="Agregar una foto"
                   onPress={cargarImagen}
                 />
                 <Button
                   color="#7C88D5"
                   borderRadius="20"
-                  title="Agregar una foto con tu cámara"
-                  onPress={cargarImagen2}
-                /> */}
-
-                  <TouchableOpacity
-                    style={styles.buttonText1}
-                    onPress={(e) => handleSubmit(e)}
-                  >
-                    <Text style={styles.texto}>Crear</Text>
-                  </TouchableOpacity>
-                </View>
+                  padding="10"
+                  title="Crear"
+                  onPress={(e) => handleSubmit(e)}
+                />
               </View>
-            )}
-          </Formik>
-        </ScrollView>
-      </View>
+            </View>
+          )}
+        </Formik>
+      </ScrollView>
     );
   }
 }
@@ -258,25 +222,19 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#7C88D5",
   },
-  /*container: {
-    fontFamily: "Roboto_400Regular",
-    flex: 1,
-    padding: 15,
-    borderRadius: 20,
-    marginLeft: 10,
-    marginRight: 10,
-    height: 60,
-  },*/
-
   inputGroup: {
-    /*flex: 1,*/
     padding: 5,
-    /*marginLeft: 5,
-    marginRight: 5,*/
     marginBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#d9d9d9",
     height: 60,
+  },
+  inputGroup2: {
+    padding: 5,
+    marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#d9d9d9",
+    height: 350,
   },
   buttonCont: {
     display: "flex",
