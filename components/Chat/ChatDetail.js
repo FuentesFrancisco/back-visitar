@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AppLoading } from "expo";
 import BackIcon from "../images/BackIcon";
+import useUser from "../Users/useUser";
 import {
   StyleSheet,
   Text,
@@ -9,6 +10,7 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  ActivityIndicator,
 } from "react-native";
 import {
   useFonts,
@@ -18,17 +20,87 @@ import {
 } from "@expo-google-fonts/roboto";
 import SendIcon from "../images/SendIcon";
 import Header from "../Header/Header";
+import { gql, useQuery, useSubscription, useMutation } from "@apollo/client";
 
 let image = require("../images/bag.png");
 
+const QUERY = gql`
+  query usuario($id: JSON, $id2: JSON) {
+    usuario(id: $id) {
+      chats(id: $id2) {
+        mensaje
+        remitenteId
+        destinatarioId
+      }
+    }
+  }
+`;
+
+const CHAT = gql`
+  subscription addChat($remitenteId: String!, $destinatarioId: String!) {
+    addChat(remitenteId: $remitenteId, destinatarioId: $destinatarioId) {
+      mensaje
+      destinatarioId
+      remitenteId
+    }
+  }
+`;
+
+const SEND = gql`
+  mutation addChat($input: ChatInput) {
+    addChat(input: $input) {
+      mensaje
+    }
+  }
+`;
+
 export default function ChatDetail({ route, navigation }) {
+  const { userDB } = useUser();
+  const [message, setMessage] = useState([]);
+  const [newMessage, setNewMessage] = useState("");
+  const [input, setInput] = useState("");
+
+  const { subscribeToMore, loading, data, error, refetch } = useQuery(QUERY, {
+    variables: {
+      id: userDB.usuarios[0]._id,
+      id2: route.params.id,
+    },
+  });
+
+  const [send] = useMutation(SEND);
+
+  data && !message.length && setMessage(data.usuario.chats);
+
+  useEffect(() => {
+    subscribeToNewToDos();
+  }, []);
+
+  const subscribeToNewToDos = () =>
+    subscribeToMore({
+      document: CHAT, // the gql subscription operation
+      // How do we update our ToDos data when subscription data comes through.
+      variables: {
+        remitenteId: userDB.usuarios[0]._id,
+        destinatarioId: route.params.id,
+      },
+      updateQuery: (usuario, { subscriptionData }) => {
+        if (!subscriptionData.data) return usuario;
+        const newToDo = subscriptionData.data.addChat;
+        let result;
+        if (usuario.usuario.chats)
+          result = usuario.usuario.chats.concat(newToDo);
+        setMessage(result);
+        refetch();
+      },
+    });
+
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
     Roboto_500Medium,
   });
   if (!fontsLoaded) {
-    return <AppLoading />;
+    return <ActivityIndicator size="small" color="#0000ff" />;
   } else {
     return (
       <View>
@@ -48,51 +120,32 @@ export default function ChatDetail({ route, navigation }) {
               ></Image>
             </View>
             <View style={styles.eventDetail}>
-              <Text style={styles.titulo}>
-                {route.params.nombre + " " + route.params.apellido}
-              </Text>
-              <Text style={styles.subTitulo}>
+              <Text style={styles.titulo}>{route.params.nombre}</Text>
+              {/*  <Text style={styles.subTitulo}>
                 {route.params.especialidad + " - " + route.params.laboratorio}
-              </Text>
+              </Text> */}
             </View>
           </View>
           <ScrollView style={styles.scroll2}>
-            {/*aca necesitamos un map de todos los mensajes*/}
-            <View>
-              <Text style={styles.out}>
-                Hola! <Text style={styles.time}>15:54</Text>
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.in}>
-                Qué Tal?? <Text style={styles.time}>15:54</Text>
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.out}>
-                Bien! <Text style={styles.time}>15:54</Text>
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.in}>
-                Vas a ir al proximo congreso de Agentes de propaganda Medica?{" "}
-                <Text style={styles.time}>15:55</Text>
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.out}>
-                Cuando es? <Text style={styles.time}>15:55</Text>
-              </Text>
-            </View>
-            <View>
-              <Text style={styles.in}>
-                En febrero, en la ciudad de mendoza{" "}
-                <Text style={styles.time}>15:58</Text>
-              </Text>
-            </View>
+            {message &&
+              message.map((msj, i) => (
+                <View key={i}>
+                  <Text
+                    style={
+                      msj.remitenteId === userDB.usuarios[0]._id
+                        ? styles.in
+                        : styles.out
+                    }
+                  >
+                    {msj.mensaje} <Text style={styles.time}>15:54</Text>
+                  </Text>
+                </View>
+              ))}
           </ScrollView>
           <View style={styles.input}>
             <TextInput
+              onChangeText={(e) => setInput(e)}
+              value={input}
               style={{
                 height: 40,
                 borderColor: "gray",
@@ -105,7 +158,19 @@ export default function ChatDetail({ route, navigation }) {
               }}
             ></TextInput>
             <TouchableOpacity
-              onPress={() => alert("enviar")}
+              onPress={() => {
+                send({
+                  variables: {
+                    input: {
+                      mensaje: input,
+                      remitenteId: userDB.usuarios[0]._id,
+                      destinatarioId: route.params.id,
+                      //time: Date.now(),
+                    },
+                  },
+                });
+                setInput(" ");
+              }}
               style={{
                 flex: 1,
                 justifyContent: "center",

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { AppLoading } from "expo";
 import useUser from "../Users/useUser";
+import { gql, useQuery, useSubscription } from "@apollo/client";
 import {
   StyleSheet,
   ScrollView,
@@ -20,23 +21,169 @@ import BinIcon from "../images/BinIcon";
 import { TextInput } from "react-native-gesture-handler";
 import SearchIcon from "../images/SearchIcon";
 import Header from "../Header/Header";
+import Spinner from "react-native-loading-spinner-overlay";
 
+const CHATS = gql`
+  query chats($where: JSON) {
+    chats(where: $where) {
+      remitenteId
+      remitente {
+        nombre
+        apellido
+        imagen
+      }
+      destinatarioId
+      destinatario {
+        nombre
+        apellido
+        imagen
+      }
+      mensaje
+    }
+  }
+`;
 const image = {
   uri:
     "https://www.hqts.com/wp-content/uploads/2020/04/Pharmaceutical-Materials-no-logo-01-1110x550.jpg",
 };
 
 export default function ChatCard({ navigation }) {
-  const { user } = useUser();
+  const [idUsuarios, setIdUsuarios] = useState([]);
+  const [message, setMessage] = useState([]);
+  const [chatNuevo, setChatNuevo] = useState("");
+  const [flag, setFlag] = useState(false);
+
+  const { userDB } = useUser();
+  const { subscribeToMore, loading, data, error, refetch } = useQuery(CHATS, {
+    variables: {
+      where: {
+        $or: [
+          { remitenteId: userDB.usuarios[0]._id },
+          { destinatarioId: userDB.usuarios[0]._id },
+        ],
+      },
+    },
+  });
+  useEffect(() => {
+    subscribeToNewToDos();
+  }, []);
+
+  const MYCHAT = gql`
+    subscription myChat($id: String) {
+      myChat(_id: $id) {
+        mensaje
+        destinatarioId
+        remitenteId
+        remitente {
+          nombre
+          apellido
+          imagen
+        }
+        destinatario {
+          nombre
+          apellido
+          imagen
+        }
+      }
+    }
+  `;
+  let filtrado = (array, id) => {
+    let arreglo = [];
+    array.map((lugar) => {
+      arreglo.push(lugar.remitenteId);
+      arreglo.push(lugar.destinatarioId);
+    });
+
+    let idUnicos = arreglo.filter((res) => res !== id);
+
+    const dataArr = new Set(idUnicos);
+
+    let result = [...dataArr];
+
+    return result;
+  };
+
+  let ultimoMsj = () => {
+    let mensajes = [];
+    let chates;
+    if (data) {
+      chates = data.chats;
+    }
+    let nuevo;
+    if (chatNuevo) {
+      nuevo = chates.concat(chatNuevo);
+    }
+    if (nuevo) {
+      for (let i = 0; i < idUsuarios.length; i++) {
+        let flag = false;
+        let indices = [];
+        for (let j = nuevo.length - 1; j > -1; j--) {
+          if (
+            !flag &&
+            (nuevo[j].destinatarioId === idUsuarios[i] ||
+              nuevo[j].remitenteId === idUsuarios[i])
+          ) {
+            mensajes.push(nuevo[j]);
+            flag = true;
+          }
+        }
+      }
+    } else {
+      for (let i = 0; i < idUsuarios.length; i++) {
+        let flag = false;
+        let indices = [];
+        for (let j = chates.length - 1; j > -1; j--) {
+          if (
+            !flag &&
+            (chates[j].destinatarioId === idUsuarios[i] ||
+              chates[j].remitenteId === idUsuarios[i])
+          ) {
+            mensajes.push(chates[j]);
+            flag = true;
+          }
+        }
+      }
+    }
+    setFlag(!flag);
+    setMessage(mensajes);
+  };
+
+  data &&
+    !idUsuarios.length &&
+    setIdUsuarios(filtrado(data.chats, userDB.usuarios[0]._id));
+
+  useEffect(() => {
+    ultimoMsj();
+  }, [idUsuarios]);
 
   let [fontsLoaded] = useFonts({
     Roboto_100Thin,
     Roboto_400Regular,
     Roboto_500Medium,
   });
+  const subscribeToNewToDos = () =>
+    subscribeToMore({
+      document: MYCHAT, // the gql subscription operation
+      // How do we update our ToDos data when subscription data comes through.
+      variables: { id: userDB.usuarios[0]._id },
+      updateQuery: (chats, { subscriptionData }) => {
+        if (!subscriptionData.data) return chats;
+        const newToDo = subscriptionData.data.myChat;
+        const result = chats.chats.concat(newToDo);
+        setChatNuevo(result[result.length - 1]);
+        setIdUsuarios(filtrado(result, userDB.usuarios[0]._id));
+        return { chats: result };
+      },
+    });
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
+  if (loading) {
+    return (
+      <Spinner
+        visible={true}
+        textContent={"Cargando chats..."}
+        textStyle={styles.spinnerTextStyle}
+      />
+    );
   } else {
     return (
       <View>
@@ -92,118 +239,53 @@ export default function ChatCard({ navigation }) {
         </View>
         <View style={styles.container}>
           <ScrollView style={styles.scroll2}>
-            {/*<SearchBar navigation={navigation}/>*/}
-            {/*aca  va un map de los chats*/}
-            <TouchableOpacity
-              onPress={() => navigation.navigate("ChatDetail", { id: user })}
-            >
-              <View style={styles.eventContainer}>
-                <View style={styles.imgContainer}>
-                  <Image source={image} style={styles.image}></Image>
-                </View>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>Estefania Bonessa</Text>
+            {message.reverse().map((chat, i) => (
+              <TouchableOpacity
+                key={i}
+                onPress={() =>
+                  navigation.navigate("ChatDetail", {
+                    id:
+                      userDB.usuarios[0]._id === chat.remitenteId
+                        ? chat.destinatarioId
+                        : chat.remitenteId,
+                    imagen:
+                      userDB.usuarios[0]._id === chat.remitenteId
+                        ? chat.destinatario.imagen
+                        : chat.remitente.imagen,
+                    nombre:
+                      userDB.usuarios[0]._id === chat.remitenteId
+                        ? chat.destinatario.nombre +
+                          " " +
+                          chat.destinatario.apellido
+                        : chat.remitente.nombre + " " + chat.remitente.apellido,
+                  })
+                }
+              >
+                <View style={styles.eventContainer}>
+                  <View style={styles.imgContainer}>
+                    <Image
+                      source={
+                        userDB.usuarios[0]._id === chat.remitenteId
+                          ? chat.destinatario.imagen
+                          : chat.remitente.imagen
+                      }
+                      style={styles.image}
+                    ></Image>
+                  </View>
+                  <View style={styles.eventDetail}>
+                    <Text style={styles.titulo}>
+                      {userDB.usuarios[0]._id === chat.remitenteId
+                        ? chat.destinatario.nombre +
+                          " " +
+                          chat.destinatario.apellido
+                        : chat.remitente.nombre + " " + chat.remitente.apellido}
+                    </Text>
 
-                  <Text style={styles.text}>Texto del mensaje</Text>
+                    <Text style={styles.text}>{chat.mensaje}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.eventContainer}>
-                <View style={styles.imgContainer}>
-                  <Image source={image} style={styles.image}></Image>
-                </View>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>Estefania Bonessa</Text>
-
-                  <Text style={styles.text}>Texto del mensaje</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.eventContainer}>
-                <View style={styles.imgContainer}>
-                  <Image source={image} style={styles.image}></Image>
-                </View>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>Estefania Bonessa</Text>
-
-                  <Text style={styles.text}>Texto del mensaje</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.eventContainer}>
-                <View style={styles.imgContainer}>
-                  <Image source={image} style={styles.image}></Image>
-                </View>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>Estefania Bonessa</Text>
-
-                  <Text style={styles.text}>Texto del mensaje</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.eventContainer}>
-                <View style={styles.imgContainer}>
-                  <Image source={image} style={styles.image}></Image>
-                </View>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>Estefania Bonessa</Text>
-
-                  <Text style={styles.text}>Texto del mensaje</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.eventContainer}>
-                <View style={styles.imgContainer}>
-                  <Image source={image} style={styles.image}></Image>
-                </View>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>Estefania Bonessa</Text>
-
-                  <Text style={styles.text}>Texto del mensaje</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.eventContainer}>
-                <View style={styles.imgContainer}>
-                  <Image source={image} style={styles.image}></Image>
-                </View>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>Estefania Bonessa</Text>
-
-                  <Text style={styles.text}>Texto del mensaje</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.eventContainer}>
-                <View style={styles.imgContainer}>
-                  <Image source={image} style={styles.image}></Image>
-                </View>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>Estefania Bonessa</Text>
-
-                  <Text style={styles.text}>Texto del mensaje</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity>
-              <View style={styles.eventContainer}>
-                <View style={styles.imgContainer}>
-                  <Image source={image} style={styles.image}></Image>
-                </View>
-                <View style={styles.eventDetail}>
-                  <Text style={styles.titulo}>Estefania Bonessa</Text>
-
-                  <Text style={styles.text}>Texto del mensaje</Text>
-                </View>
-              </View>
-            </TouchableOpacity>
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </View>
       </View>

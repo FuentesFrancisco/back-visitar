@@ -5,10 +5,13 @@ const getImagen = async () => {
     mediaTypes: ImagePicker.MediaTypeOptions.All,
     allowsEditing: true,
     aspect: [4, 3],
+    base64: true,
     quality: 1,
   });
   if (!result.cancelled) {
-    return result.uri;
+    let recorte = result.uri.split(".");
+    let formato = recorte[recorte.length - 1];
+    return `data:image/${formato};base64,${result.base64}`;
   }
 };
 
